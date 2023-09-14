@@ -1,8 +1,0 @@
-{
-  "runtimeOptions": {
-    "additionalProbingPaths": [
-      "C:\\Users\\Vaganas Gnybas\\.dotnet\\store\\|arch|\\|tfm|",
-      "C:\\Users\\Vaganas Gnybas\\.nuget\\packages"
-    ]
-  }
-}
