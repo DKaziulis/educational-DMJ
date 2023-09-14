@@ -1,0 +1,30 @@
+C:\Users\Vaganas Gnybas\source\repos\educational-DMJ\Student Planner\bin\Debug\net7.0\appsettings.Development.json
+C:\Users\Vaganas Gnybas\source\repos\educational-DMJ\Student Planner\bin\Debug\net7.0\appsettings.json
+C:\Users\Vaganas Gnybas\source\repos\educational-DMJ\Student Planner\bin\Debug\net7.0\Student Planner.staticwebassets.runtime.json
+C:\Users\Vaganas Gnybas\source\repos\educational-DMJ\Student Planner\bin\Debug\net7.0\Student Planner.exe
+C:\Users\Vaganas Gnybas\source\repos\educational-DMJ\Student Planner\bin\Debug\net7.0\Student Planner.deps.json
+C:\Users\Vaganas Gnybas\source\repos\educational-DMJ\Student Planner\bin\Debug\net7.0\Student Planner.runtimeconfig.json
+C:\Users\Vaganas Gnybas\source\repos\educational-DMJ\Student Planner\bin\Debug\net7.0\Student Planner.dll
+C:\Users\Vaganas Gnybas\source\repos\educational-DMJ\Student Planner\bin\Debug\net7.0\Student Planner.pdb
+C:\Users\Vaganas Gnybas\source\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\Student Planner.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Vaganas Gnybas\source\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\Student Planner.AssemblyInfoInputs.cache
+C:\Users\Vaganas Gnybas\source\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\Student Planner.AssemblyInfo.cs
+C:\Users\Vaganas Gnybas\source\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\Student Planner.csproj.CoreCompileInputs.cache
+C:\Users\Vaganas Gnybas\source\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\Student Planner.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\Vaganas Gnybas\source\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\Student Planner.RazorAssemblyInfo.cache
+C:\Users\Vaganas Gnybas\source\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\Student Planner.RazorAssemblyInfo.cs
+C:\Users\Vaganas Gnybas\source\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\staticwebassets\msbuild.Student Planner.Microsoft.AspNetCore.StaticWebAssets.props
+C:\Users\Vaganas Gnybas\source\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\staticwebassets\msbuild.build.Student Planner.props
+C:\Users\Vaganas Gnybas\source\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\staticwebassets\msbuild.buildMultiTargeting.Student Planner.props
+C:\Users\Vaganas Gnybas\source\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\staticwebassets\msbuild.buildTransitive.Student Planner.props
+C:\Users\Vaganas Gnybas\source\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\staticwebassets.pack.json
+C:\Users\Vaganas Gnybas\source\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\staticwebassets.build.json
+C:\Users\Vaganas Gnybas\source\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\staticwebassets.development.json
+C:\Users\Vaganas Gnybas\source\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
+C:\Users\Vaganas Gnybas\source\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\scopedcss\bundle\Student Planner.styles.css
+C:\Users\Vaganas Gnybas\source\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\scopedcss\projectbundle\Student Planner.bundle.scp.css
+C:\Users\Vaganas Gnybas\source\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\Student Planner.dll
+C:\Users\Vaganas Gnybas\source\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\refint\Student Planner.dll
+C:\Users\Vaganas Gnybas\source\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\Student Planner.pdb
+C:\Users\Vaganas Gnybas\source\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\Student Planner.genruntimeconfig.cache
+C:\Users\Vaganas Gnybas\source\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\ref\Student Planner.dll
