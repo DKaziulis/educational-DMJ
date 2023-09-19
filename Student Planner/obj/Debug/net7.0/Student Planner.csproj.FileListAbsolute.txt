@@ -28,3 +28,33 @@ C:\Users\Vaganas Gnybas\source\repos\educational-DMJ\Student Planner\obj\Debug\n
 C:\Users\Vaganas Gnybas\source\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\Student Planner.pdb
 C:\Users\Vaganas Gnybas\source\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\Student Planner.genruntimeconfig.cache
 C:\Users\Vaganas Gnybas\source\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\ref\Student Planner.dll
+D:\dOwnLoAd\C#\repos\educational-DMJ\Student Planner\bin\Debug\net7.0\appsettings.Development.json
+D:\dOwnLoAd\C#\repos\educational-DMJ\Student Planner\bin\Debug\net7.0\appsettings.json
+D:\dOwnLoAd\C#\repos\educational-DMJ\Student Planner\bin\Debug\net7.0\Student Planner.staticwebassets.runtime.json
+D:\dOwnLoAd\C#\repos\educational-DMJ\Student Planner\bin\Debug\net7.0\Student Planner.exe
+D:\dOwnLoAd\C#\repos\educational-DMJ\Student Planner\bin\Debug\net7.0\Student Planner.deps.json
+D:\dOwnLoAd\C#\repos\educational-DMJ\Student Planner\bin\Debug\net7.0\Student Planner.runtimeconfig.json
+D:\dOwnLoAd\C#\repos\educational-DMJ\Student Planner\bin\Debug\net7.0\Student Planner.dll
+D:\dOwnLoAd\C#\repos\educational-DMJ\Student Planner\bin\Debug\net7.0\Student Planner.pdb
+D:\dOwnLoAd\C#\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\Student Planner.GeneratedMSBuildEditorConfig.editorconfig
+D:\dOwnLoAd\C#\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\Student Planner.AssemblyInfoInputs.cache
+D:\dOwnLoAd\C#\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\Student Planner.AssemblyInfo.cs
+D:\dOwnLoAd\C#\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\Student Planner.csproj.CoreCompileInputs.cache
+D:\dOwnLoAd\C#\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\Student Planner.MvcApplicationPartsAssemblyInfo.cache
+D:\dOwnLoAd\C#\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\Student Planner.RazorAssemblyInfo.cache
+D:\dOwnLoAd\C#\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\Student Planner.RazorAssemblyInfo.cs
+D:\dOwnLoAd\C#\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\staticwebassets\msbuild.Student Planner.Microsoft.AspNetCore.StaticWebAssets.props
+D:\dOwnLoAd\C#\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\staticwebassets\msbuild.build.Student Planner.props
+D:\dOwnLoAd\C#\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\staticwebassets\msbuild.buildMultiTargeting.Student Planner.props
+D:\dOwnLoAd\C#\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\staticwebassets\msbuild.buildTransitive.Student Planner.props
+D:\dOwnLoAd\C#\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\staticwebassets.pack.json
+D:\dOwnLoAd\C#\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\staticwebassets.build.json
+D:\dOwnLoAd\C#\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\staticwebassets.development.json
+D:\dOwnLoAd\C#\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
+D:\dOwnLoAd\C#\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\scopedcss\bundle\Student Planner.styles.css
+D:\dOwnLoAd\C#\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\scopedcss\projectbundle\Student Planner.bundle.scp.css
+D:\dOwnLoAd\C#\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\Student Planner.dll
+D:\dOwnLoAd\C#\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\refint\Student Planner.dll
+D:\dOwnLoAd\C#\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\Student Planner.pdb
+D:\dOwnLoAd\C#\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\Student Planner.genruntimeconfig.cache
+D:\dOwnLoAd\C#\repos\educational-DMJ\Student Planner\obj\Debug\net7.0\ref\Student Planner.dll
