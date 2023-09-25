@@ -2,7 +2,20 @@
     ViewData["Title"] = "Home Page";
 }
 
+<head>
+    <link rel="stylesheet" href="~/css/index.css" asp-append-version="true" />
+
+</head>
+
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    
+    <h1 class="display-4">Student planner</h1>
+    <div id="text-box">
+        <p>A calendar based planner application, where you can collaborate with others by posting or editing files that have their designated time slots for every day of the week.</p>
+    </div>
+
+</div>
+
+<div id="date-box">
+    <p>Today's date:</p>  <p>@DateTime.Now.ToString("yyyy-MM-dd")</p>
 </div>
