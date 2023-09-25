@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Student_Planner.Models;
 using System.Diagnostics;
+using Student_Planner.Scripts;
 
 namespace Student_Planner.Controllers
 {
@@ -15,6 +16,11 @@ namespace Student_Planner.Controllers
 
         public IActionResult Index()
         {
+            string filePath = "ReadFiles/ApplicationDescription.txt";
+            string fileContent = ReadTxtFile.ReadTextFile(filePath);
+
+            ViewData["Message"] = fileContent;
+
             return View();
         }
 

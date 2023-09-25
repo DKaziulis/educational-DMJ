@@ -7,4 +7,8 @@
     <RootNamespace>Student_Planner</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="ReadFiles\" />
+  </ItemGroup>
+
 </Project>
