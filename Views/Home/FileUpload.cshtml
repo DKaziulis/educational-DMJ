@@ -1,4 +1,8 @@
-﻿<form method="post" enctype="multipart/form-data" asp-controller="Home" asp-action="FileUpload">
+﻿@{
+    ViewData["Title"] = "File upload";
+}
+
+<form method="post" enctype="multipart/form-data" asp-controller="Home" asp-action="FileUpload">
     <div class="form-group">
         <div class="col-md-10">
             <p>Upload File</p>
