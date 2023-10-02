@@ -1,0 +1,32 @@
+﻿@model List<Event>
+
+@{
+    ViewBag.Title = "Event List";
+}
+
+<h2>Event List</h2>
+
+<table class="table">
+    <tr>
+        <th>Name</th>
+        <th>Date</th>
+        <th>Description</th>
+        <th>Actions</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Name</td>
+            <td>@item.Date.ToShortDateString()</td>
+            <td>@item.Description</td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
+</table>
+
+<p>
+    @Html.ActionLink("Create New Event", "Create")
+</p>
