@@ -11,7 +11,6 @@ namespace Student_Planner.Controllers
         private static List<Event> events = new List<Event>();
 
 
-        // GET: Events
         public ActionResult Index()
         {
             // Sort events by date before displaying.
@@ -19,26 +18,25 @@ namespace Student_Planner.Controllers
             return View(sortedEvents);
         }
 
-        // GET: Events/Create
+
         public ActionResult Create()
         {
             return View("~/Views/Events/Create.cshtml");
         }
 
-        // POST: Events/Create
+
         [HttpPost]
         public ActionResult Create(Event newEvent)
         {
             if (ModelState.IsValid)
             {
-                newEvent.Id = events.Count + 1; // Assign a unique ID
+                newEvent.Id = events.Count + 1; // unique ID
                 events.Add(newEvent);
                 return RedirectToAction("Index");
             }
             return View(newEvent);
         }
 
-        // GET: Events/Edit/5
         public ActionResult Edit(int id)
         {
             var existingEvent = events.FirstOrDefault(e => e.Id == id);
@@ -49,7 +47,6 @@ namespace Student_Planner.Controllers
             return View(existingEvent);
         }
 
-        // POST: Events/Edit/5
         [HttpPost]
         public ActionResult Edit(Event updatedEvent)
         {
@@ -68,7 +65,6 @@ namespace Student_Planner.Controllers
             return View(updatedEvent);
         }
 
-        // GET: Events/Delete/5
         public ActionResult Delete(int id)
         {
             var existingEvent = events.FirstOrDefault(e => e.Id == id);
@@ -79,17 +75,21 @@ namespace Student_Planner.Controllers
             return View(existingEvent);
         }
 
-        // POST: Events/Delete/5
-        [HttpPost, ActionName("Delete")]
+ 
+
+        [HttpPost, ActionName("DeleteConfirmed")]
+        [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
             var existingEvent = events.FirstOrDefault(e => e.Id == id);
             if (existingEvent != null)
             {
                 events.Remove(existingEvent);
+                return RedirectToAction("Index");
             }
-            return RedirectToAction("Index");
+            return NotFound();
         }
+
 
 
     }
