@@ -27,5 +27,8 @@ app.MapControllerRoute(
 app.MapControllerRoute(
     name: "fileUpload",
     pattern: "{controller=FileManagement}/{action=FileUpload}/{id?}");
+app.MapControllerRoute(
+    name: "calendar",
+    pattern: "{controller=Calendar}/{action=Calendar}/{id?}");
 
 app.Run();
