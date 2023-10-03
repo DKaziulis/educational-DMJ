@@ -17,7 +17,8 @@
     {
         <tr>
             <td>@item.Name</td>
-            <td>@item.Date.ToShortDateString()</td>
+            <!-- <td>@item.Date.ToShortDateString()</td> -->
+            <td>@item.Date.ToString("HH:mm yyyy.MM.dd")</td>
             <td>@item.Description</td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
