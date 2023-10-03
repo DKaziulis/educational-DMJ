@@ -21,7 +21,7 @@ namespace Student_Planner.Controllers
 
         public ActionResult Create()
         {
-            return View("~/Views/Events/Create.cshtml");
+            return View();
         }
 
 
