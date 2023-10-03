@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="EventData\" />
     <Folder Include="Upload\" />
     <Folder Include="ReadFiles\" />
   </ItemGroup>

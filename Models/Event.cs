@@ -1,4 +1,6 @@
-﻿namespace Student_Planner.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Student_Planner.Models
 {
     public class Event
     {

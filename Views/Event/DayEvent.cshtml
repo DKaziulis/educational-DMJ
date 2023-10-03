@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Student_Planner.Models.Event>
+﻿@model Student_Planner.Models.Event
 @{
     ViewData["Title"] = "Day Event";
 }
@@ -14,15 +14,28 @@
                 <input name="EventName" class="form-control" />
             </div>
             <div class="form-group">
+                <label class="control-label">EventID</label>
+                <input name="EventID" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">EventDescription</label>
+            </div>
+            <textarea asp-for="EventDescription" rows="10" cols="100"></textarea>
+            <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
-        <div class="form-group">
-            <span>@ViewBag.Message</span>
-        </div>
     </div>
 </div>
-
+<div class="form-group">
+    <span>@Model.EventName</span>
+</div>
+<div>
+    <span>@Model.EventID</span>
+</div>
+<div>
+    <span>@Model.EventDescription</span>
+</div>
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
