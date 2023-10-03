@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace Student_Planner.Scripts
+namespace Student_Planner.Models
 {
     public class ReadTxtFile
     {
