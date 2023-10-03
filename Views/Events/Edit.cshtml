@@ -20,7 +20,7 @@
 
     <div class="form-group">
         @Html.LabelFor(model => model.Date)
-        @Html.TextBoxFor(model => model.Date, new { @class = "form-control", type = "date" })
+        @Html.TextBoxFor(model => model.Date, new { @class = "form-control", type = "datetime-local" })
         @Html.ValidationMessageFor(model => model.Date)
     </div>
 
