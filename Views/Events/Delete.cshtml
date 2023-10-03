@@ -1,0 +1,44 @@
+﻿@model Event
+
+@{
+    ViewBag.Title = "Delete Event";
+}
+
+<h2>Delete</h2>
+
+<p>Are you sure you want to delete this event?</p>
+
+
+<dl class="row">
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.Name)
+    </dt>
+    <dd class="col-sm-9">
+        @Html.DisplayFor(model => model.Name)
+    </dd>
+
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.Date)
+    </dt>
+    <dd class="col-sm-9">
+        @Html.DisplayFor(model => model.Date)
+    </dd>
+
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.Description)
+    </dt>
+    <dd class="col-sm-9">
+        @Html.DisplayFor(model => model.Description)
+    </dd>
+</dl>
+
+
+@using (Html.BeginForm("DeleteConfirmed", "Events", new { id = Model.Id }, FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div >
+        <button type="submit" style="margin-right: 100px;" class="btn btn-danger">Delete</button>
+        @Html.ActionLink("Cancel", "Index")
+    </div>
+}
