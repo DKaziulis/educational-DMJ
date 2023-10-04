@@ -9,7 +9,7 @@
 <table class="table">
     <tr>
         <th>Name</th>
-        <th>Date</th>
+        <th>StartTime</th>
         <th>Description</th>
         <th>Actions</th>
     </tr>
@@ -17,8 +17,8 @@
     {
         <tr>
             <td>@item.Name</td>
-            <!-- <td>@item.Date.ToShortDateString()</td> -->
-            <td>@item.Date.ToString("HH:mm yyyy.MM.dd")</td>
+            <!-- <td>@item.StartTime.ToShortDateString()</td> -->
+            <td>@item.StartTime.ToString("HH:mm yyyy.MM.dd")</td>
             <td>@item.Description</td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |

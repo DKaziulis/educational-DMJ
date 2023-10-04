@@ -9,8 +9,8 @@
 
   <ItemGroup>
     <Folder Include="EventData\" />
-    <Folder Include="Upload\" />
     <Folder Include="ReadFiles\" />
+    <Folder Include="Upload\" />
   </ItemGroup>
 
   <ItemGroup>
