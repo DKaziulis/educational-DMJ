@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Student_Planner.Models;
 using System.Diagnostics;
-using Student_Planner.Scripts;
 
 namespace Student_Planner.Controllers
 {

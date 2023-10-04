@@ -25,10 +25,10 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapControllerRoute(
-    name: "fileUpload",
-    pattern: "{controller=FileManagement}/{action=FileUpload}/{id?}");
-app.MapControllerRoute(
     name: "calendar",
     pattern: "{controller=Calendar}/{action=Calendar}/{id?}");
+app.MapControllerRoute(
+    name: "event",
+    pattern: "{controller=Event}/{action=DayEvent}/{id?}");
 
 app.Run();
