@@ -8,9 +8,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Upload\**" />
+    <Content Remove="Upload\**" />
+    <EmbeddedResource Remove="Upload\**" />
+    <None Remove="Upload\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="EventData\" />
     <Folder Include="ReadFiles\" />
-    <Folder Include="Upload\" />
   </ItemGroup>
 
   <ItemGroup>

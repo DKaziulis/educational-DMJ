@@ -10,6 +10,7 @@
 
         document.addEventListener('DOMContentLoaded', function () {
             var calendarEl = document.getElementById('calendar');
+            var currentDate = '@DateTime.Now.ToString("yyyy-MM-dd")';
 
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 headerToolbar: {
@@ -17,7 +18,7 @@
                     center: 'title',
                     right: 'dayGridMonth,timeGridWeek,timeGridDay'
                 },
-                initialDate: '2023-01-12',
+                initialDate: currentDate,
                 navLinks: true, // can click day/week names to navigate views
                 selectable: true,
                 selectMirror: true,
