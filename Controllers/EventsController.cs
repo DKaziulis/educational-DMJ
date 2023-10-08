@@ -44,11 +44,17 @@ namespace Student_Planner.Controllers
 
         public ActionResult Index()
         {
+            //LINQ STUFF
             events = DeserializeFromJSON(jsonData, events);
 
-            // Sort events by date before displaying.
-            var sortedEvents = events.OrderBy(e => e.StartTime).ToList();
-            return View(sortedEvents);
+            // Filter events that are upcoming and order them by start time.
+            var today = DateTime.Today;
+            var upcomingEvents = events
+                .Where(e => e.StartTime >= today)
+                .OrderBy(e => e.StartTime)
+                .ToList();
+
+            return View(upcomingEvents);
         }
 
 
@@ -128,9 +134,5 @@ namespace Student_Planner.Controllers
             }
             return NotFound();
         }
-
-
-
     }
-
 }
