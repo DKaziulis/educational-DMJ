@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Student_Planner.Controllers;
+using System.ComponentModel.DataAnnotations;
 
 namespace Student_Planner.Models
 {
@@ -11,5 +12,7 @@ namespace Student_Planner.Models
         public DateTime EventEndTime { get; set; }
         public string? Description { get; set; }
         public TimeSpan EventDuration { get; set; }
+        public EventsController.CourseGroup CourseGroup { get; set; }
+
     }
 }

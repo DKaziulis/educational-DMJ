@@ -11,6 +11,7 @@
         <th>Name</th>
         <th>StartTime</th>
         <th>Description</th>
+        <th>Group</th> 
         <th>Actions</th>
     </tr>
     @foreach (var item in Model)
@@ -20,6 +21,7 @@
             <!-- <td>@item.StartTime.ToShortDateString()</td> -->
             <td>@item.StartTime.ToString("HH:mm yyyy.MM.dd")</td>
             <td>@item.Description</td>
+            <td>@item.CourseGroup</td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
                 @Html.ActionLink("Delete", "Delete", new { id = item.Id })
@@ -27,6 +29,7 @@
         </tr>
     }
 </table>
+
 
 <p>
     @Html.ActionLink("Create New Event", "Create")
