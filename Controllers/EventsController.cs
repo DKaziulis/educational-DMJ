@@ -5,6 +5,7 @@ using Student_Planner.Services;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using System.Globalization;
+using System.Text.Json.Serialization;
 
 namespace Student_Planner.Controllers
 {
@@ -21,18 +22,36 @@ namespace Student_Planner.Controllers
         {
             //LINQ STUFF
             events = jsonControl.DeserializeFromJSON(jsonData, events);
-            days.Add(new Day(Date: new DateOnly(2023, 10, 10), events));
-            days.Add(new Day(Date: DateOnly.Parse("2023.10.11", CultureInfo.InvariantCulture), events));
-            // Filter events that are upcoming and order them by start time.
-            var today = DateTime.Today;
-            var upcomingEvents = days
-                //.Where(e => e.Date >= today)
-                .OrderBy(e => e.Date)
-                .ToList();
 
-            return View(upcomingEvents);
+            // Filter the days that have upcoming events and order them by start time.
+            var dates = days
+            .OrderBy(d => d.Date)
+            .ToList();
+
+            /*var upcomingEvents = events
+                .Where(e => e.startTime >= today)
+                .OrderBy(e => e.Name)
+                .ToList();*/
+
+            return View(dates);
         }
 
+        public ActionResult AddDay()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult AddDay(Day newDay)
+        {
+            if (ModelState.IsValid)
+            {
+                days.Add(newDay);
+
+                return RedirectToAction("Index");
+            }
+            return View(newDay);
+        }
 
         public ActionResult Create()
         {
@@ -48,7 +67,7 @@ namespace Student_Planner.Controllers
                 newEvent.Id = events.Count + 1; // unique ID
                 events.Add(newEvent);
 
-                jsonControl.SerializeToJson(jsonData);
+                jsonControl.SerializeToJson(jsonData, eventDataFilePath);
 
                 return RedirectToAction("Index");
             }
@@ -78,7 +97,7 @@ namespace Student_Planner.Controllers
                     existingEvent.StartTime = updatedEvent.StartTime;
                     existingEvent.Description = updatedEvent.Description;
 
-                    jsonControl.SerializeToJson(jsonData);
+                    jsonControl.SerializeToJson(jsonData, eventDataFilePath);
                 }
                 return RedirectToAction("Index");
             }
@@ -105,7 +124,7 @@ namespace Student_Planner.Controllers
             if (existingEvent != null)
             {
                 events.Remove(existingEvent);
-                jsonControl.SerializeToJson(jsonData);
+                jsonControl.SerializeToJson(jsonData, eventDataFilePath);
                 return RedirectToAction("Index");
             }
             return NotFound();

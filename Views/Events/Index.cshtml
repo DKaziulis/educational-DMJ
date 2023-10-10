@@ -4,6 +4,9 @@
     ViewBag.Title = "Event List";
 }
 
+<p>
+    @Html.ActionLink("Add New Day", "AddDay")
+</p>
 @foreach (var item in Model)
 {
     <h2>@item.Date.ToString("yyyy.MM.dd")</h2>

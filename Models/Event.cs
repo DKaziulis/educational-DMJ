@@ -4,6 +4,7 @@ namespace Student_Planner.Models
 {
     public class Event
     {
+        public Event() { }
         public Event(string? name, DateTime startTime, DateTime eventEndTime, string? description, TimeSpan eventDuration)
         {
             Name = name;

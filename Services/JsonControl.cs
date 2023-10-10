@@ -7,6 +7,7 @@ namespace Student_Planner.Services
     {
         public List<T>? SerializableData { get; set; }
         public string? DataFilePath { get; set; }
+        public JsonControl() { }
         public JsonControl(string dataFilePath, List<T> list)
         {
             SerializableData = list;
@@ -14,7 +15,7 @@ namespace Student_Planner.Services
         }
 
         //Method for serializing data into a JSON file in the EventData folder
-        public void SerializeToJson(string jsonData)
+        public void SerializeToJson(string jsonData, string? DataFilePath)
         {
             // Serialize the list of events to JSON
             jsonData = JsonSerializer.Serialize(SerializableData);
