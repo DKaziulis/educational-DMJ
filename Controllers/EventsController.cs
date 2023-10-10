@@ -28,9 +28,11 @@ namespace Student_Planner.Controllers
             {
                 if(file != null)
                 {
-                    Day loadDay = new Day();
-                    loadDay.Date = DateOnly.Parse(file.Remove(10, 5));
-                    loadDay.events = events;
+                    Day loadDay = new()
+                    {
+                        Date = DateOnly.Parse(file.Remove(10, 5)),
+                        events = events
+                    };
                     days.Add(loadDay);
                 }
             }
@@ -42,7 +44,16 @@ namespace Student_Planner.Controllers
             //LINQ STUFF
             events = jsonControl.DeserializeFromJSON(jsonData, eventDataFilePath, events);
             days = LoadDays(eventDataFilePath, events);
-            completePath = Path.Combine(completePath, string.Concat(days[^1].Date.ToString("yyyy-MM-dd"), ".json"));
+
+            foreach (Day day in days)
+            {
+                completePath = Path.Combine(eventDataFilePath, string.Concat(day.Date.ToString("yyyy-MM-dd"), ".json"));
+                Console.WriteLine("Test");
+                day.events = jsonControl.DeserializeFromJSON(jsonData, completePath, events);
+            }
+            completePath = eventDataFilePath;
+            //days = LoadDays(eventDataFilePath, events);
+            //completePath = Path.Combine(completePath, string.Concat(days[^1].Date.ToString("yyyy-MM-dd"), ".json"));
 
             // Filter the days that have upcoming events and order them by start time.
             var dates = days
@@ -81,18 +92,17 @@ namespace Student_Planner.Controllers
             return View();
         }
 
-
         [HttpPost]
-        public ActionResult Create(Event newEvent)
+        public ActionResult Create(Event newEvent, Day getDay)
         {
             if (ModelState.IsValid)
             {
                 newEvent.Id = events.Count + 1; // unique ID
-                events.Add(newEvent);
+                days[^1].events.Add(newEvent);
 
                 completePath = Path.Combine(eventDataFilePath, string.Concat(days[^1].Date.ToString("yyyy-MM-dd"), ".json"));
 
-                jsonControl.SerializeToJson(jsonData, completePath);
+                jsonControl.SerializeToJson(jsonData, completePath, days[^1].events);
 
                 return RedirectToAction("Index");
             }
@@ -122,7 +132,7 @@ namespace Student_Planner.Controllers
                     existingEvent.StartTime = updatedEvent.StartTime;
                     existingEvent.Description = updatedEvent.Description;
 
-                    jsonControl.SerializeToJson(jsonData, eventDataFilePath);
+                    jsonControl.SerializeToJson(jsonData, eventDataFilePath, days[^1].events);
                 }
                 return RedirectToAction("Index");
             }
@@ -149,7 +159,7 @@ namespace Student_Planner.Controllers
             if (existingEvent != null)
             {
                 events.Remove(existingEvent);
-                jsonControl.SerializeToJson(jsonData, eventDataFilePath);
+                jsonControl.SerializeToJson(jsonData, eventDataFilePath, days[^1].events);
                 return RedirectToAction("Index");
             }
             return NotFound();

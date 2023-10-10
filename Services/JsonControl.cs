@@ -15,10 +15,10 @@ namespace Student_Planner.Services
         }
 
         //Method for serializing data into a JSON file in the EventData folder
-        public void SerializeToJson(string jsonData, string? DataFilePath)
+        public void SerializeToJson(string jsonData, string? DataFilePath, List<T> listOfObjects)
         {
             // Serialize the list of events to JSON
-            jsonData = JsonSerializer.Serialize(SerializableData);
+            jsonData = JsonSerializer.Serialize(listOfObjects);
             // Write the JSON data to the file
             try
             {
@@ -34,7 +34,7 @@ namespace Student_Planner.Services
         }
 
         //Deserialize the JSON file data back into an events list if the file exists
-        public List<T> DeserializeFromJSON(string jsonData, string? DataFilePath , List<T> listOfObjects)
+        public List<T> DeserializeFromJSON(string jsonData, string? DataFilePath, List<T> listOfObjects)
         {
             try
             {
