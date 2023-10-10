@@ -3,14 +3,16 @@ using Microsoft.AspNetCore.Mvc;
 using Student_Planner.Models;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using System.Globalization;
 
 namespace Student_Planner.Controllers
 {
     public class EventsController : Controller
     {
         private static List<Event> events = new List<Event>();
+        private static List<Day> days = new List<Day>();
         private string jsonData = "";
-        private static string eventDataFilePath = Path.GetFullPath(Path.Combine
+        private static readonly string eventDataFilePath = Path.GetFullPath(Path.Combine
             (Path.Combine(Directory.GetCurrentDirectory(), "EventData"), "Test.json"));
 
         //Method for serializing data into a JSON file in the EventData folder
@@ -46,12 +48,13 @@ namespace Student_Planner.Controllers
         {
             //LINQ STUFF
             events = DeserializeFromJSON(jsonData, events);
-
+            days.Add(new Day(Date: new DateOnly(2023, 10, 10), events));
+            days.Add(new Day(Date: DateOnly.Parse("2023.10.11", CultureInfo.InvariantCulture), events));
             // Filter events that are upcoming and order them by start time.
             var today = DateTime.Today;
-            var upcomingEvents = events
-                .Where(e => e.StartTime >= today)
-                .OrderBy(e => e.StartTime)
+            var upcomingEvents = days
+                //.Where(e => e.Date >= today)
+                .OrderBy(e => e.Date)
                 .ToList();
 
             return View(upcomingEvents);

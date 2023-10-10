@@ -4,6 +4,14 @@ namespace Student_Planner.Models
 {
     public class Event
     {
+        public Event(string? name, DateTime startTime, DateTime eventEndTime, string? description, TimeSpan eventDuration)
+        {
+            Name = name;
+            StartTime = startTime;
+            EventEndTime = eventEndTime;
+            Description = description;
+            EventDuration = eventDuration;
+        }
         public int Id { get; set; }
         [MaxLength(60)]
         public string? Name { get; set; }

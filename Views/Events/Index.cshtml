@@ -1,33 +1,39 @@
-﻿@model List<Event>
+﻿@model List<Day>
 
 @{
     ViewBag.Title = "Event List";
 }
 
-<h2>Event List</h2>
+@foreach (var item in Model)
+{
+    <h2>@item.Date.ToString("yyyy.MM.dd")</h2>
 
-<table class="table">
-    <tr>
-        <th>Name</th>
-        <th>StartTime</th>
-        <th>Description</th>
-        <th>Actions</th>
-    </tr>
-    @foreach (var item in Model)
-    {
+    <table class="table">
         <tr>
-            <td>@item.Name</td>
-            <!-- <td>@item.StartTime.ToShortDateString()</td> -->
-            <td>@item.StartTime.ToString("HH:mm yyyy.MM.dd")</td>
-            <td>@item.Description</td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-            </td>
+            <th>Name</th>
+            <th>StartTime</th>
+            <th>Description</th>
+            <th>Actions</th>
         </tr>
-    }
-</table>
+        @if (item.events != null)
+        {
+            @foreach (var dayEvent in item.events)
+            {
+                <tr>
+                    <td>@dayEvent.Name</td>
+                    <!-- <td>@dayEvent.StartTime.ToShortDateString()</td> -->
+                    <td>@dayEvent.StartTime.ToString("HH:mm yyyy.MM.dd")</td>
+                    <td>@dayEvent.Description</td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = dayEvent.Id }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = dayEvent.Id })
+                    </td>
+                </tr>
+            }
+        }
+    </table>
 
-<p>
-    @Html.ActionLink("Create New Event", "Create")
-</p>
+    <p>
+        @Html.ActionLink("Create New Event", "Create")
+    </p>
+}
