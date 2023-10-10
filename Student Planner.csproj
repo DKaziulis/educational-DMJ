@@ -16,7 +16,6 @@
 
   <ItemGroup>
     <Folder Include="EventData\" />
-    <Folder Include="Services\" />
     <Folder Include="ReadFiles\" />
   </ItemGroup>
 

@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Student_Planner.Models;
+using Student_Planner.Services;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using System.Globalization;
@@ -14,40 +15,12 @@ namespace Student_Planner.Controllers
         private string jsonData = "";
         private static readonly string eventDataFilePath = Path.GetFullPath(Path.Combine
             (Path.Combine(Directory.GetCurrentDirectory(), "EventData"), "Test.json"));
-
-        //Method for serializing data into a JSON file in the EventData folder
-        private void SerializeToJson(string jsonData)
-        {
-            // Serialize the list of events to JSON
-            jsonData = JsonSerializer.Serialize(events);
-            // Write the JSON data to the file
-            System.IO.File.WriteAllText(eventDataFilePath, jsonData);
-        }
-
-        //Deserialize the JSON file data back into an events list if the file exists
-        private List<Event> DeserializeFromJSON(string json, List<Event> events)
-        {
-            if (System.IO.File.Exists(eventDataFilePath))
-            {
-                jsonData = System.IO.File.ReadAllText(eventDataFilePath);
-
-                if (!string.IsNullOrEmpty(jsonData))
-                {
-                    events = JsonSerializer.Deserialize<List<Event>>(jsonData);
-                }
-                else
-                {
-                    // Handle the case where jsonData is empty
-                    events.Clear();
-                }
-            }
-            return events;
-        }
+        private JsonControl<Event> jsonControl = new JsonControl<Event>(eventDataFilePath, events);
 
         public ActionResult Index()
         {
             //LINQ STUFF
-            events = DeserializeFromJSON(jsonData, events);
+            events = jsonControl.DeserializeFromJSON(jsonData, events);
             days.Add(new Day(Date: new DateOnly(2023, 10, 10), events));
             days.Add(new Day(Date: DateOnly.Parse("2023.10.11", CultureInfo.InvariantCulture), events));
             // Filter events that are upcoming and order them by start time.
@@ -75,7 +48,7 @@ namespace Student_Planner.Controllers
                 newEvent.Id = events.Count + 1; // unique ID
                 events.Add(newEvent);
 
-                SerializeToJson(jsonData);
+                jsonControl.SerializeToJson(jsonData);
 
                 return RedirectToAction("Index");
             }
@@ -105,7 +78,7 @@ namespace Student_Planner.Controllers
                     existingEvent.StartTime = updatedEvent.StartTime;
                     existingEvent.Description = updatedEvent.Description;
 
-                    SerializeToJson(jsonData);
+                    jsonControl.SerializeToJson(jsonData);
                 }
                 return RedirectToAction("Index");
             }
@@ -132,7 +105,7 @@ namespace Student_Planner.Controllers
             if (existingEvent != null)
             {
                 events.Remove(existingEvent);
-                SerializeToJson(jsonData);
+                jsonControl.SerializeToJson(jsonData);
                 return RedirectToAction("Index");
             }
             return NotFound();
