@@ -160,6 +160,7 @@ namespace Student_Planner.Controllers
                     // Updates event properties
                     existingEvent.Name = updatedEvent.Name;
                     existingEvent.StartTime = updatedEvent.StartTime;
+                    existingEvent.CourseGroup = updatedEvent.CourseGroup;
                     existingEvent.Description = updatedEvent.Description;
 
                     // Serialize the updated events in the same day's JSON file
