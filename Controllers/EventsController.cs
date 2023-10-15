@@ -9,8 +9,20 @@ using System.Text.Json.Serialization;
 
 namespace Student_Planner.Controllers
 {
+
+
     public class EventsController : Controller
     {
+        public enum CourseGroup
+        {
+            Group1,
+            Group2,
+            Group3,
+            Group4,
+            Group5,
+            AllGroups
+        }
+
         private static List<Event> events = new List<Event>();
         private static List<Day> days = new List<Day>();
         private string jsonData = "";

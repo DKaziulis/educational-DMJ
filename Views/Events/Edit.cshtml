@@ -1,4 +1,5 @@
 ﻿@model Event
+@using Student_Planner.Controllers
 
 @{
     ViewBag.Title = "Edit Event";
@@ -28,6 +29,11 @@
         @Html.LabelFor(model => model.Description)
         @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
         @Html.ValidationMessageFor(model => model.Description)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.CourseGroup)
+        @Html.DropDownListFor(model => model.CourseGroup, new SelectList(Enum.GetValues(typeof(EventsController.CourseGroup))), "Select Group", new { @class = "form-control" })
     </div>
 
     <button type="submit" class="btn btn-primary">Save Changes</button>
