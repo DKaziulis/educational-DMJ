@@ -33,7 +33,7 @@
 </dl>
 
 
-@using (Html.BeginForm("DeleteConfirmed", "Events", new { id = Model.Id }, FormMethod.Post))
+@using (Html.BeginForm("DeleteConfirmed", "Events", new { id = Model.Id, dayId = DateOnly.FromDateTime(Model.StartTime) }, FormMethod.Post))
 {
     @Html.AntiForgeryToken()
 

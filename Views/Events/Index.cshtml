@@ -5,7 +5,7 @@
 }
 
 <p>
-    @Html.ActionLink("Create New Event", "Create", new {size = "390"})
+    @Html.ActionLink("Create New Event", "Create")
 </p>
 @foreach (var item in Model)
 {
@@ -28,8 +28,8 @@
                     <td>@dayEvent.StartTime.ToString("HH:mm yyyy.MM.dd")</td>
                     <td>@dayEvent.Description</td>
                     <td>
-                        @Html.ActionLink("Edit", "Edit", new { id = dayEvent.Id }) |
-                        @Html.ActionLink("Delete", "Delete", new { id = dayEvent.Id })
+                        @Html.ActionLink("Edit", "Edit", new { id = dayEvent.Id, dayId = item.Date }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = dayEvent.Id, dayId = item.Date })
                     </td>
                 </tr>
             }
