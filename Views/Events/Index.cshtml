@@ -5,7 +5,7 @@
 }
 
 <p>
-    @Html.ActionLink("Add New Day", "AddDay")
+    @Html.ActionLink("Create New Event", "Create", new {size = "390"})
 </p>
 @foreach (var item in Model)
 {
@@ -35,8 +35,4 @@
             }
         }
     </table>
-
-    <p>
-        @Html.ActionLink("Create New Event", "Create")
-    </p>
 }

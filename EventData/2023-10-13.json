@@ -1,0 +1,1 @@
+[{"Id":1,"Name":"SomeOtherEvent","StartTime":"2023-10-13T11:16:00","EventEndTime":"0001-01-01T00:00:00","Description":"bababa","EventDuration":"00:00:00"},{"Id":1,"Name":"OneMore","StartTime":"2023-10-13T02:17:00","EventEndTime":"0001-01-01T00:00:00","Description":"Another event","EventDuration":"00:00:00"}]
