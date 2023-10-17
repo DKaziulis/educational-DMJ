@@ -37,7 +37,7 @@ namespace Student_Planner.Controllers
             string?[] files = Directory.GetFiles(filePath).Select(Path.GetFileName).ToArray();
             List<Day> days = new List<Day>();
 
-            foreach (string file in files)
+            foreach (string? file in files)
             {
                 if(file != null)
                 {
@@ -61,10 +61,6 @@ namespace Student_Planner.Controllers
             {
                 completePath = Path.Combine(eventDataFilePath, string.Concat(day.Date.ToString("yyyy-MM-dd"), ".json"));
                 day.events = jsonControl.DeserializeFromJSON(jsonData, completePath, events);
-                foreach (Event testEvent in day.events)
-                {
-                    Console.WriteLine(testEvent.Id);
-                }
             }
             completePath = eventDataFilePath;
             
@@ -87,7 +83,8 @@ namespace Student_Planner.Controllers
             if (ModelState.IsValid)
             {
                 //Takes the short date (yyyy-MM-dd) of the passed event, and converts it to DateOnly
-                DateOnly tempShortDate = DateOnly.FromDateTime(newEvent.StartTime);
+                newEvent.StartTime = TimeOnly.FromDateTime(newEvent.BeginDate);
+                DateOnly tempShortDate = DateOnly.FromDateTime(newEvent.BeginDate);
                 Day? updatedDay = null;
 
                 //Checks which day to create the event for
@@ -150,12 +147,12 @@ namespace Student_Planner.Controllers
             {
                 var existingDay = days.FirstOrDefault(d => d.Date == dayId);
                 var existingEvent = existingDay.events.FirstOrDefault(e => e.Id == updatedEvent.Id);
-                DateOnly tempShortDate = DateOnly.FromDateTime(updatedEvent.StartTime);
+                DateOnly tempShortDate = DateOnly.FromDateTime(updatedEvent.BeginDate);
 
                 if (existingEvent != null)
                 {
                     // Preserves the original day by setting the event's date to the existing day's date
-                    updatedEvent.StartTime = updatedEvent.StartTime.Date.Add(existingEvent.StartTime.TimeOfDay);
+                    updatedEvent.BeginDate = updatedEvent.BeginDate.Date.Add(existingEvent.BeginDate.TimeOfDay);
 
                     // Updates event properties
                     existingEvent.Name = updatedEvent.Name;
@@ -164,7 +161,7 @@ namespace Student_Planner.Controllers
                     existingEvent.Description = updatedEvent.Description;
 
                     // Serialize the updated events in the same day's JSON file
-                    string dayJsonFilePath = Path.Combine(eventDataFilePath, string.Concat(existingEvent.StartTime.Date.ToString("yyyy-MM-dd"), ".json"));
+                    string dayJsonFilePath = Path.Combine(eventDataFilePath, string.Concat(existingEvent.BeginDate.Date.ToString("yyyy-MM-dd"), ".json"));
                     jsonControl.SerializeToJson(jsonData, dayJsonFilePath, existingDay.events);
                 }
                 return RedirectToAction("Index");
@@ -197,7 +194,7 @@ namespace Student_Planner.Controllers
             {
                 existingDay.events.Remove(existingEvent);
                 string dayJsonFilePath = Path.Combine(eventDataFilePath, 
-                    string.Concat(existingEvent.StartTime.Date.ToString("yyyy-MM-dd"), ".json"));
+                    string.Concat(existingEvent.BeginDate.Date.ToString("yyyy-MM-dd"), ".json"));
 
                 if (existingDay.events.Count == 0)
                 {

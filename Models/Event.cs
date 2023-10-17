@@ -9,7 +9,7 @@ namespace Student_Planner.Models
         public Event(string? name, DateTime startTime, DateTime eventEndTime, string? description, TimeSpan eventDuration)
         {
             Name = name;
-            StartTime = startTime;
+            BeginDate = startTime;
             EventEndTime = eventEndTime;
             Description = description;
             EventDuration = eventDuration;
@@ -17,7 +17,8 @@ namespace Student_Planner.Models
         public int Id { get; set; }
         [MaxLength(60)]
         public string? Name { get; set; }
-        public DateTime StartTime { get; set; }
+        public DateTime BeginDate { get; set; }
+        public TimeOnly StartTime { get; set; }
         public DateTime EventEndTime { get; set; }
         public string? Description { get; set; }
         public TimeSpan EventDuration { get; set; }

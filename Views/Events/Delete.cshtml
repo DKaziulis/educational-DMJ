@@ -18,10 +18,10 @@
     </dd>
 
     <dt class="col-sm-3">
-        @Html.DisplayNameFor(model => model.StartTime)
+        @Html.DisplayNameFor(model => model.BeginDate)
     </dt>
     <dd class="col-sm-9">
-        @Html.DisplayFor(model => model.StartTime)
+        @Html.DisplayFor(model => model.BeginDate)
     </dd>
 
     <dt class="col-sm-3">
@@ -33,7 +33,7 @@
 </dl>
 
 
-@using (Html.BeginForm("DeleteConfirmed", "Events", new { id = Model.Id, dayId = DateOnly.FromDateTime(Model.StartTime) }, FormMethod.Post))
+@using (Html.BeginForm("DeleteConfirmed", "Events", new { id = Model.Id, dayId = DateOnly.FromDateTime(Model.BeginDate) }, FormMethod.Post))
 {
     @Html.AntiForgeryToken()
 

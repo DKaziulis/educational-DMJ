@@ -21,7 +21,7 @@
 
     <div class="form-group">
         @Html.LabelFor(model => model.StartTime)
-        @Html.TextBoxFor(model => model.StartTime, new { @class = "form-control", type = "datetime-local", style = "width:200px"})
+        @Html.TextBoxFor(model => model.StartTime, new { @class = "form-control", type = "time", style = "width:200px"})
         @Html.ValidationMessageFor(model => model.StartTime)
     </div>
 
