@@ -6,6 +6,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using System.Globalization;
 using System.Text.Json.Serialization;
+using System.Composition;
 
 namespace Student_Planner.Controllers
 {
@@ -90,7 +91,7 @@ namespace Student_Planner.Controllers
                 //Checks which day to create the event for
                 foreach(Day singleDay in days)
                 {
-                    if (singleDay.Date == tempShortDate)
+                    if (singleDay.events != null && singleDay.Date == tempShortDate)
                     {
                         singleDay.events.Add(newEvent);
                         updatedDay = singleDay;
@@ -116,10 +117,17 @@ namespace Student_Planner.Controllers
                 }
 
                 //Creates a unique ID, which consists of the event Date info, and the serial number of the day's events
-                string customId = updatedDay.Date.ToString("yyyyMMdd") + updatedDay.events.Count.ToString();
-                newEvent.Id = Convert.ToInt32(customId); // unique ID
+                if(updatedDay.events != null)
+                {
+                    string customId = updatedDay.Date.ToString("yyyyMMdd") + updatedDay.events.Count.ToString();
+                    newEvent.Id = Convert.ToInt32(customId); // unique ID
 
-                jsonControl.SerializeToJson(jsonData, completePath, updatedDay.events);
+                    jsonControl.SerializeToJson(jsonData, completePath, updatedDay.events);
+                }
+                else
+                {
+                    return NotFound();
+                }
 
                 return RedirectToAction("Index");
             }
@@ -130,14 +138,21 @@ namespace Student_Planner.Controllers
         {
             //Checks for the correct Date, and event ID to edit the event
             var existingDay = days.FirstOrDefault(d => d.Date == dayId);
-            var existingEvent = existingDay.events.FirstOrDefault(e => e.Id == id);
-
-            if (existingEvent == null)
+            if (existingDay != null && existingDay.events != null)
             {
-                return NotFound();
-            }
+                var existingEvent = existingDay.events.FirstOrDefault(e => e.Id == id);
+                
+                if (existingEvent == null)
+                {
+                    return NotFound();
+                }
 
-            return View(existingEvent);
+                return View(existingEvent);
+            } 
+            else 
+            {  
+                return NotFound(); 
+            }
         }
 
         [HttpPost]
@@ -146,25 +161,28 @@ namespace Student_Planner.Controllers
             if (ModelState.IsValid)
             {
                 var existingDay = days.FirstOrDefault(d => d.Date == dayId);
-                var existingEvent = existingDay.events.FirstOrDefault(e => e.Id == updatedEvent.Id);
-                DateOnly tempShortDate = DateOnly.FromDateTime(updatedEvent.BeginDate);
-
-                if (existingEvent != null)
+                if (existingDay != null && existingDay.events != null)
                 {
-                    // Preserves the original day by setting the event's date to the existing day's date
-                    updatedEvent.BeginDate = updatedEvent.BeginDate.Date.Add(existingEvent.BeginDate.TimeOfDay);
+                    var existingEvent = existingDay.events.FirstOrDefault(e => e.Id == updatedEvent.Id);
+                    DateOnly tempShortDate = DateOnly.FromDateTime(updatedEvent.BeginDate);
 
-                    // Updates event properties
-                    existingEvent.Name = updatedEvent.Name;
-                    existingEvent.StartTime = updatedEvent.StartTime;
-                    existingEvent.CourseGroup = updatedEvent.CourseGroup;
-                    existingEvent.Description = updatedEvent.Description;
+                    if (existingEvent != null)
+                    {
+                        // Preserves the original day by setting the event's date to the existing day's date
+                        updatedEvent.BeginDate = updatedEvent.BeginDate.Date.Add(existingEvent.BeginDate.TimeOfDay);
 
-                    // Serialize the updated events in the same day's JSON file
-                    string dayJsonFilePath = Path.Combine(eventDataFilePath, string.Concat(existingEvent.BeginDate.Date.ToString("yyyy-MM-dd"), ".json"));
-                    jsonControl.SerializeToJson(jsonData, dayJsonFilePath, existingDay.events);
+                        // Updates event properties
+                        existingEvent.Name = updatedEvent.Name;
+                        existingEvent.StartTime = updatedEvent.StartTime;
+                        existingEvent.CourseGroup = updatedEvent.CourseGroup;
+                        existingEvent.Description = updatedEvent.Description;
+
+                        // Serialize the updated events in the same day's JSON file
+                        string dayJsonFilePath = Path.Combine(eventDataFilePath, string.Concat(existingEvent.BeginDate.Date.ToString("yyyy-MM-dd"), ".json"));
+                        jsonControl.SerializeToJson(jsonData, dayJsonFilePath, existingDay.events);
+                    }
+                    return RedirectToAction("Index");
                 }
-                return RedirectToAction("Index");
             }
             return View(updatedEvent);
         }
@@ -174,13 +192,13 @@ namespace Student_Planner.Controllers
         {
             //Checks for the correct Date, and event ID to delete the event
             var existingDay = days.FirstOrDefault(d => d.Date == dayId);
-            var existingEvent = existingDay.events.FirstOrDefault(e => e.Id == id);
-
-            if (existingEvent == null)
+            if(existingDay != null && existingDay.events != null)
             {
-                return NotFound();
+                var existingEvent = existingDay.events.FirstOrDefault(e => e.Id == id);
+
+                return View(existingEvent);
             }
-            return View(existingEvent);
+            return NotFound(); 
         }
 
         [HttpPost, ActionName("DeleteConfirmed")]
@@ -188,22 +206,25 @@ namespace Student_Planner.Controllers
         public ActionResult DeleteConfirmed(int id, DateOnly dayId)
         {
             var existingDay = days.FirstOrDefault(d => d.Date == dayId);
-            var existingEvent = existingDay.events.FirstOrDefault(e => e.Id == id);
-            
-            if (existingEvent != null)
+            if (existingDay != null && existingDay.events != null)
             {
-                existingDay.events.Remove(existingEvent);
-                string dayJsonFilePath = Path.Combine(eventDataFilePath, 
-                    string.Concat(existingEvent.BeginDate.Date.ToString("yyyy-MM-dd"), ".json"));
+                var existingEvent = existingDay.events.FirstOrDefault(e => e.Id == id);
+                if (existingEvent != null)
+                {
+                    existingDay.events.Remove(existingEvent);
+                    string dayJsonFilePath = Path.Combine(eventDataFilePath,
+                        string.Concat(existingEvent.BeginDate.Date.ToString("yyyy-MM-dd"), ".json"));
 
-                if (existingDay.events.Count == 0)
-                {
-                    System.IO.File.Delete(dayJsonFilePath);
-                } else
-                {
-                    jsonControl.SerializeToJson(jsonData, dayJsonFilePath, existingDay.events);
+                    if (existingDay.events.Count == 0)
+                    {
+                        System.IO.File.Delete(dayJsonFilePath);
+                    }
+                    else
+                    {
+                        jsonControl.SerializeToJson(jsonData, dayJsonFilePath, existingDay.events);
+                    }
+                    return RedirectToAction("Index");
                 }
-                return RedirectToAction("Index");
             }
             return NotFound();
         }
