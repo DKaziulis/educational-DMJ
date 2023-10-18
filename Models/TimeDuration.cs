@@ -15,6 +15,10 @@
                 Minutes = minutes;
                 Seconds = seconds;
             }
+            public TimeSpan ToTimeSpan()
+            {
+                return new TimeSpan(Hours, Minutes, Seconds);
+            }
         }
     }
 }

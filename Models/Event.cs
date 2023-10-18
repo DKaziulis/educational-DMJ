@@ -12,7 +12,7 @@ namespace Student_Planner.Models
             BeginDate = startTime;
             EventEndTime = eventEndTime;
             Description = description;
-            EventDuration = eventDuration;
+            EventDuration = eventDuration.ToTimeSpan();
         }
         public int Id { get; set; }
         [MaxLength(60)]
@@ -21,7 +21,7 @@ namespace Student_Planner.Models
         public TimeOnly StartTime { get; set; }
         public DateTime EventEndTime { get; set; }
         public string? Description { get; set; }
-        public TimeDuration.Time EventDuration { get; set; }
+        public TimeSpan EventDuration { get; set; }
         public EventsController.CourseGroup CourseGroup { get; set; }
 
     }
