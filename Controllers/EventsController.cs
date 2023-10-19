@@ -32,27 +32,6 @@ namespace Student_Planner.Controllers
         private static string completePath = eventDataFilePath;
         private JsonControl<Event> jsonControl = new JsonControl<Event>(eventDataFilePath, events);
 
-        //Loads the list of all existing dates from json files in the EventData folder
-        public List<Day> LoadDays(string filePath, List<Event> events)
-        {
-            string?[] files = Directory.GetFiles(filePath).Select(Path.GetFileName).ToArray();
-            List<Day> days = new List<Day>();
-
-            foreach (string? file in files)
-            {
-                if(file != null)
-                {
-                    Day loadDay = new()
-                    {
-                        Date = DateOnly.Parse(file.Remove(10, 5)),
-                        events = events
-                    };
-                    days.Add(loadDay);
-                }
-            }
-            return days;
-        }
-
         public ActionResult Index()
         {
             events = jsonControl.DeserializeFromJSON(jsonData, eventDataFilePath, events);
@@ -227,6 +206,27 @@ namespace Student_Planner.Controllers
                 }
             }
             return NotFound();
+        }
+
+        //Loads the list of all existing dates from json files in the EventData folder
+        public List<Day> LoadDays(string filePath, List<Event> events)
+        {
+            string?[] files = Directory.GetFiles(filePath).Select(Path.GetFileName).ToArray();
+            List<Day> days = new List<Day>();
+
+            foreach (string? file in files)
+            {
+                if(file != null)
+                {
+                    Day loadDay = new()
+                    {
+                        Date = DateOnly.Parse(file.Remove(10, 5)),
+                        events = events
+                    };
+                    days.Add(loadDay);
+                }
+            }
+            return days;
         }
     }
 }
