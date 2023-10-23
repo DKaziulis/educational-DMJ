@@ -3,7 +3,7 @@ using Student_Planner.Models;
 using System.Text.Json;
 namespace Student_Planner.Services
 {
-    public class JsonControl<T>
+    public class JsonControl<T> // change name
     {
         public List<T>? SerializableData { get; set; }
         public string? DataFilePath { get; set; }
