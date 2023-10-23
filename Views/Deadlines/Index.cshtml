@@ -1,41 +1,45 @@
 ﻿@model List<Deadline>
 
-
 @{
     ViewData["Title"] = "Deadlines";
 }
 
-<h2>Deadlines</h2>
+<div class="container py-3">
+    <h2 class="mb-3">Deadlines</h2>
 
-@if (Model != null && Model.Any())
-{
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Title</th>
-            <th>Due Date</th>
-            <th>Details</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var deadline in Model)
-        {
+    @if (Model != null && Model.Any())
+    {
+        <table class="table table-striped">
+            <thead>
             <tr>
-                <td>@deadline.Title</td>
-                <td>@deadline.DueDate.ToString("g")</td>
-                <td>@deadline.Details</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@deadline.Id">Edit</a> |
-                    <a asp-action="Delete" asp-route-id="@deadline.Id">Delete</a>
-                </td>
+                <th scope="col">Title</th>
+                <th scope="col">Due Date</th>
+                <th scope="col">Details</th>
+                <th scope="col">Actions</th>
             </tr>
-        }
-        </tbody>
-    </table>
-}
-else
-{
-    <p>No deadlines found.</p>
-}
+            </thead>
+            <tbody>
+            @foreach (var deadline in Model)
+            {
+                <tr>
+                    <td>@deadline.Title</td>
+                    <td>@deadline.DueDate.ToString("g")</td>
+                    <td>@deadline.Details</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@deadline.Id" class="btn btn-primary btn-sm me-2">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@deadline.Id" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-info" role="alert">
+            No deadlines found.
+        </div>
+    }
 
-<a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-success mt-3">Create New</a>
+</div>

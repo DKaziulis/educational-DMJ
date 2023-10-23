@@ -29,9 +29,14 @@ public class DeadlinesController : Controller
     [HttpPost]
     public ActionResult Create(Deadline deadline)
     {
-        _deadlines.Add(deadline);
-        _deadlines.Sort();
-        return RedirectToAction("Index");
+        if (ModelState.IsValid)
+        {
+            deadline.Id = _deadlines.Count + 1;
+            _deadlines.Add(deadline);
+            _deadlines.Sort();
+            return RedirectToAction("Index");
+        }
+        return View(deadline);
     }
 
     public ActionResult Edit(int id)
