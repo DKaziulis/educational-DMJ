@@ -1,7 +1,8 @@
 ﻿@model List<Deadline>
 
+
 @{
-    ViewBag.Title = "Deadlines";
+    ViewData["Title"] = "Deadlines";
 }
 
 <h2>Deadlines</h2>
@@ -9,20 +10,32 @@
 @if (Model != null && Model.Any())
 {
     <table class="table">
+        <thead>
         <tr>
             <th>Title</th>
             <th>Due Date</th>
+            <th>Details</th>
         </tr>
+        </thead>
+        <tbody>
         @foreach (var deadline in Model)
         {
             <tr>
                 <td>@deadline.Title</td>
                 <td>@deadline.DueDate.ToString("g")</td>
+                <td>@deadline.Details</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@deadline.Id">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@deadline.Id">Delete</a>
+                </td>
             </tr>
         }
+        </tbody>
     </table>
 }
 else
 {
     <p>No deadlines found.</p>
 }
+
+<a asp-action="Create">Create New</a>
