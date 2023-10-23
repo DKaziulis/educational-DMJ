@@ -3,22 +3,22 @@ using Student_Planner.Models;
 using System.Text.Json;
 namespace Student_Planner.Services
 {
-    public class JsonControl<T> // change name
+    public class JsonHandler<T>
     {
         public List<T>? SerializableData { get; set; }
         public string? DataFilePath { get; set; }
-        public JsonControl() { }
-        public JsonControl(string dataFilePath, List<T> list)
+        public JsonHandler() { }
+        public JsonHandler(string dataFilePath, List<T> list)
         {
             SerializableData = list;
             DataFilePath = dataFilePath;
         }
 
         //Method for serializing data into a JSON file in the EventData folder
-        public void SerializeToJson(string jsonData, string? DataFilePath, List<T> listOfObjects)
+        public void SerializeToJson(string? DataFilePath, List<T> listOfObjects)
         {
             // Serialize the list of events to JSON
-            jsonData = JsonSerializer.Serialize(listOfObjects);
+            string jsonData = JsonSerializer.Serialize(listOfObjects);
             // Write the JSON data to the file
             try
             {
@@ -34,13 +34,13 @@ namespace Student_Planner.Services
         }
 
         //Deserialize the JSON file data back into an events list if the file exists
-        public List<T> DeserializeFromJSON(string jsonData, string? DataFilePath, List<T> listOfObjects)
+        public List<T> DeserializeFromJSON(string? DataFilePath, List<T> listOfObjects)
         {
             try
             {
                 if (File.Exists(DataFilePath))
                 {
-                    jsonData = File.ReadAllText(DataFilePath);
+                    string jsonData = File.ReadAllText(DataFilePath);
 
                     if (!string.IsNullOrEmpty(jsonData))
                     {
