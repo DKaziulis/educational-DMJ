@@ -43,7 +43,10 @@ namespace Student_Planner.Controllers
                 day.events = jsonControl.DeserializeFromJSON(jsonData, completePath, events);
             }
             completePath = eventDataFilePath;
-            
+
+            //Custom extension method usage
+            var sortedEvents = events.SortEvents();
+
             // Filter the days that have upcoming events and order them by start time.
             var dates = days
             .OrderBy(d => d.Date)
