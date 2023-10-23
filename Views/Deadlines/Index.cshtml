@@ -1,1 +1,28 @@
-﻿
+﻿@model List<Deadline>
+
+@{
+    ViewBag.Title = "Deadlines";
+}
+
+<h2>Deadlines</h2>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table">
+        <tr>
+            <th>Title</th>
+            <th>Due Date</th>
+        </tr>
+        @foreach (var deadline in Model)
+        {
+            <tr>
+                <td>@deadline.Title</td>
+                <td>@deadline.DueDate.ToString("g")</td>
+            </tr>
+        }
+    </table>
+}
+else
+{
+    <p>No deadlines found.</p>
+}
