@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using System.Globalization;
 using System.Text.Json.Serialization;
 using System.Composition;
+using Student_Planner.Enums;
 
 namespace Student_Planner.Controllers
 {
@@ -26,31 +27,24 @@ namespace Student_Planner.Controllers
 
         private static List<Event> events = new List<Event>();
         private static List<Day> days = new List<Day>();
-        private string jsonData = "";
         private static readonly string eventDataFilePath = Path.GetFullPath(Path.Combine(
             Directory.GetCurrentDirectory(), "EventData"));
         private static string completePath = eventDataFilePath;
-        private JsonControl<Event> jsonControl = new JsonControl<Event>(eventDataFilePath, events);
+        private JsonHandler<Event> jsonHandler = new JsonHandler<Event>(dataFilePath: eventDataFilePath, list: events);
 
         public ActionResult Index()
         {
-            events = jsonControl.DeserializeFromJSON(jsonData, eventDataFilePath, events);
-            days = LoadDays(eventDataFilePath, events);
+            days = DayHandler.LoadDays(days, eventDataFilePath);
 
             foreach (Day day in days)
             {
                 completePath = Path.Combine(eventDataFilePath, string.Concat(day.Date.ToString("yyyy-MM-dd"), ".json"));
-                day.events = jsonControl.DeserializeFromJSON(jsonData, completePath, events);
+                day.events = jsonHandler.DeserializeFromJSON(completePath);
             }
             completePath = eventDataFilePath;
 
-            //Custom extension method usage
-            var sortedEvents = events.SortEvents();
-
             // Filter the days that have upcoming events and order them by start time.
-            var dates = days
-            .OrderBy(d => d.Date)
-            .ToList();
+            var dates = days.SortDays(DaySortKey.NumOfEvents, eventSortKey: EventSortKey.StartTime);
 
             return View(dates);
         }
@@ -68,24 +62,18 @@ namespace Student_Planner.Controllers
                 //Takes the short date (yyyy-MM-dd) of the passed event, and converts it to DateOnly
                 newEvent.StartTime = TimeOnly.FromDateTime(newEvent.BeginDate);
                 DateOnly tempShortDate = DateOnly.FromDateTime(newEvent.BeginDate);
-                Day? updatedDay = null;
 
                 //Checks which day to create the event for
-                foreach(Day singleDay in days)
-                {
-                    if (singleDay.events != null && singleDay.Date == tempShortDate)
-                    {
-                        singleDay.events.Add(newEvent);
-                        updatedDay = singleDay;
-                        break;
-                    }
-                }
+                Day? updatedDay = DayHandler.FindDayForEvent(days, tempShortDate);
 
                 //If such a date exists, assigns the complete path to the date's file
-                if(updatedDay != null)
+                if (updatedDay != null && updatedDay.events != null)
+                {
+                    updatedDay.events.Add(newEvent);
                     completePath = Path.Combine(eventDataFilePath, string.Concat(updatedDay.Date.ToString("yyyy-MM-dd"), ".json"));
+                }
                 
-                //If there is no such dates, creates a new one, as well as the file for it, and
+                //If there is no such date, creates a new one, as well as the file for it, and
                 //assigns the new event data to that file
                 else
                 {
@@ -104,7 +92,7 @@ namespace Student_Planner.Controllers
                     string customId = updatedDay.Date.ToString("yyyyMMdd") + updatedDay.events.Count.ToString();
                     newEvent.Id = Convert.ToInt32(customId); // unique ID
 
-                    jsonControl.SerializeToJson(jsonData, completePath, updatedDay.events);
+                    jsonHandler.SerializeToJson(completePath, updatedDay.events);
                 }
                 else
                 {
@@ -143,28 +131,11 @@ namespace Student_Planner.Controllers
             if (ModelState.IsValid)
             {
                 var existingDay = days.FirstOrDefault(d => d.Date == dayId);
-                if (existingDay != null && existingDay.events != null)
-                {
-                    var existingEvent = existingDay.events.FirstOrDefault(e => e.Id == updatedEvent.Id);
-                    DateOnly tempShortDate = DateOnly.FromDateTime(updatedEvent.BeginDate);
 
-                    if (existingEvent != null)
-                    {
-                        // Preserves the original day by setting the event's date to the existing day's date
-                        updatedEvent.BeginDate = updatedEvent.BeginDate.Date.Add(existingEvent.BeginDate.TimeOfDay);
+                //updates the event properties and saves to json file
+                updatedEvent = EventOperator.EditEvent(existingDay, updatedEvent, eventDataFilePath);
 
-                        // Updates event properties
-                        existingEvent.Name = updatedEvent.Name;
-                        existingEvent.StartTime = updatedEvent.StartTime;
-                        existingEvent.CourseGroup = updatedEvent.CourseGroup;
-                        existingEvent.Description = updatedEvent.Description;
-
-                        // Serialize the updated events in the same day's JSON file
-                        string dayJsonFilePath = Path.Combine(eventDataFilePath, string.Concat(existingEvent.BeginDate.Date.ToString("yyyy-MM-dd"), ".json"));
-                        jsonControl.SerializeToJson(jsonData, dayJsonFilePath, existingDay.events);
-                    }
-                    return RedirectToAction("Index");
-                }
+                return RedirectToAction("Index");
             }
             return View(updatedEvent);
         }
@@ -193,43 +164,12 @@ namespace Student_Planner.Controllers
                 var existingEvent = existingDay.events.FirstOrDefault(e => e.Id == id);
                 if (existingEvent != null)
                 {
-                    existingDay.events.Remove(existingEvent);
-                    string dayJsonFilePath = Path.Combine(eventDataFilePath,
-                        string.Concat(existingEvent.BeginDate.Date.ToString("yyyy-MM-dd"), ".json"));
-
-                    if (existingDay.events.Count == 0)
-                    {
-                        System.IO.File.Delete(dayJsonFilePath);
-                    }
-                    else
-                    {
-                        jsonControl.SerializeToJson(jsonData, dayJsonFilePath, existingDay.events);
-                    }
+                    //updates the day's event list or deletes it if the list is empty
+                    existingDay = EventOperator.DeleteEvent(existingDay, existingEvent, eventDataFilePath);
                     return RedirectToAction("Index");
                 }
             }
             return NotFound();
-        }
-
-        //Loads the list of all existing dates from json files in the EventData folder
-        public List<Day> LoadDays(string filePath, List<Event> events)
-        {
-            string?[] files = Directory.GetFiles(filePath).Select(Path.GetFileName).ToArray();
-            List<Day> days = new List<Day>();
-
-            foreach (string? file in files)
-            {
-                if(file != null)
-                {
-                    Day loadDay = new()
-                    {
-                        Date = DateOnly.Parse(file.Remove(10, 5)),
-                        events = events
-                    };
-                    days.Add(loadDay);
-                }
-            }
-            return days;
         }
     }
 }
