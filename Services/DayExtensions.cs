@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Student_Planner.Enums;
 using Student_Planner.Models;
 using System;
 using System.Collections.Generic;
@@ -9,9 +10,9 @@ namespace Student_Planner.Services
 {
     public static class DayExtensions
     {
-        public static List<Day> SortDays(this List<Day> days, string daySortKey = "Date", string eventSortKey = "Name")
+        public static List<Day> SortDays(this List<Day> days, DaySortKey daySortKey = DaySortKey.Date, EventSortKey eventSortKey = EventSortKey.Name)
         {
-            PropertyInfo? property = typeof(Day).GetProperty(daySortKey);
+            PropertyInfo? property = typeof(Day).GetProperty(daySortKey.ToString());
             if (property == null)
             {
                 throw new ArgumentException("Invalid or non-existent sorting key.");
@@ -22,6 +23,7 @@ namespace Student_Planner.Services
             .Select(day => new Day
             {
                 Date = day.Date,
+                NumOfEvents = day.NumOfEvents,
                 events = day.events?.SortEvents(sortKey: eventSortKey)
             })
             .ToList();

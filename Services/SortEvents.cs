@@ -1,4 +1,5 @@
-﻿using Student_Planner.Models;
+﻿using Student_Planner.Enums;
+using Student_Planner.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +9,9 @@ namespace Student_Planner.Services
 {
     public static class EventExtensions
     {
-        public static List<Event> SortEvents(this List<Event> events, string sortKey = "Name")
+        public static List<Event> SortEvents(this List<Event> events, EventSortKey sortKey = EventSortKey.Name)
         {
-            PropertyInfo? property = typeof(Event).GetProperty(sortKey);
+            PropertyInfo? property = typeof(Event).GetProperty(sortKey.ToString());
             if (property == null)
             {
                 throw new ArgumentException("Invalid or non-existent sorting key.");

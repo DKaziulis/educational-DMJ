@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using System.Globalization;
 using System.Text.Json.Serialization;
 using System.Composition;
+using Student_Planner.Enums;
 
 namespace Student_Planner.Controllers
 {
@@ -43,7 +44,7 @@ namespace Student_Planner.Controllers
             completePath = eventDataFilePath;
 
             // Filter the days that have upcoming events and order them by start time.
-            var dates = days.SortDays(eventSortKey: "StartTime");
+            var dates = days.SortDays(DaySortKey.NumOfEvents, eventSortKey: EventSortKey.StartTime);
 
             return View(dates);
         }
