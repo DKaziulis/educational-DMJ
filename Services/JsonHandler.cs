@@ -34,8 +34,9 @@ namespace Student_Planner.Services
         }
 
         //Deserialize the JSON file data back into an events list if the file exists
-        public List<T> DeserializeFromJSON(string? DataFilePath, List<T> listOfObjects)
+        public List<T> DeserializeFromJSON(string? DataFilePath)
         {
+            List<T>? listOfObjects = new List<T>();
             try
             {
                 if (File.Exists(DataFilePath))
