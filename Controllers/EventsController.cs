@@ -11,8 +11,6 @@ using Student_Planner.Enums;
 
 namespace Student_Planner.Controllers
 {
-
-
     public class EventsController : Controller
     {
         public enum CourseGroup
@@ -57,50 +55,60 @@ namespace Student_Planner.Controllers
         [HttpPost]
         public ActionResult Create(Event newEvent)
         {
-            if (ModelState.IsValid)
+            try
             {
-                //Takes the short date (yyyy-MM-dd) of the passed event, and converts it to DateOnly
-                newEvent.StartTime = TimeOnly.FromDateTime(newEvent.BeginDate);
-                DateOnly tempShortDate = DateOnly.FromDateTime(newEvent.BeginDate);
-
-                //Checks which day to create the event for
-                Day? updatedDay = DayHandler.FindDayForEvent(days, tempShortDate);
-
-                //If such a date exists, assigns the complete path to the date's file
-                if (updatedDay != null && updatedDay.events != null)
+                if (ModelState.IsValid)
                 {
-                    updatedDay.events.Add(newEvent);
-                    completePath = Path.Combine(eventDataFilePath, string.Concat(updatedDay.Date.ToString("yyyy-MM-dd"), ".json"));
-                }
-                
-                //If there is no such date, creates a new one, as well as the file for it, and
-                //assigns the new event data to that file
-                else
-                {
-                    updatedDay = new Day {
-                        Date = tempShortDate,
-                        events = new List<Event> { newEvent }
-                    };
-                    days.Add(updatedDay);
-                    completePath = Path.Combine(completePath, string.Concat(updatedDay.Date.ToString("yyyy-MM-dd"), ".json"));
-                    System.IO.File.Create(completePath).Close();
-                }
+                    //Takes the short date (yyyy-MM-dd) of the passed event, and converts it to DateOnly
+                    newEvent.StartTime = TimeOnly.FromDateTime(newEvent.BeginDate);
+                    DateOnly tempShortDate = DateOnly.FromDateTime(newEvent.BeginDate);
 
-                //Creates a unique ID, which consists of the event Date info, and the serial number of the day's events
-                if(updatedDay.events != null)
-                {
-                    string customId = updatedDay.Date.ToString("yyyyMMdd") + updatedDay.events.Count.ToString();
-                    newEvent.Id = Convert.ToInt32(customId); // unique ID
+                    //Checks which day to create the event for
+                    Day? updatedDay = DayHandler.FindDayForEvent(days, tempShortDate);
 
-                    jsonHandler.SerializeToJson(completePath, updatedDay.events);
-                }
-                else
-                {
-                    return NotFound();
-                }
+                    //If such a date exists, assigns the complete path to the date's file
+                    if (updatedDay != null && updatedDay.events != null)
+                    {
+                        updatedDay.events.Add(newEvent);
+                        completePath = Path.Combine(eventDataFilePath, string.Concat(updatedDay.Date.ToString("yyyy-MM-dd"), ".json"));
+                    }
 
-                return RedirectToAction("Index");
+                    //If there is no such date, creates a new one, as well as the file for it, and
+                    //assigns the new event data to that file
+                    else
+                    {
+                        updatedDay = new Day
+                        {
+                            Date = tempShortDate,
+                            events = new List<Event> { newEvent }
+                        };
+                        days.Add(updatedDay);
+                        completePath = Path.Combine(completePath, string.Concat(updatedDay.Date.ToString("yyyy-MM-dd"), ".json"));
+                        System.IO.File.Create(completePath).Close();
+                    }
+
+                    //Creates a unique ID, which consists of the event Date info, and the serial number of the day's events
+                    if (updatedDay.events != null)
+                    {
+                        string customId = updatedDay.Date.ToString("yyyyMMdd") + updatedDay.events.Count.ToString();
+                        newEvent.Id = Convert.ToInt32(customId); // unique ID
+
+                        jsonHandler.SerializeToJson(completePath, updatedDay.events);
+                    }
+                    else
+                    {
+                        return NotFound();
+                    }
+
+                    return RedirectToAction("Index");
+                }
             }
+            catch (ArgumentException ex)
+            {
+                // Catch the exception and set a custom error message in the ModelState
+                ModelState.AddModelError("Name", ex.Message);
+            }
+
             return View(newEvent);
         }
 
