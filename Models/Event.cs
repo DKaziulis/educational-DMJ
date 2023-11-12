@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using Student_Planner.Models.Exceptions;
 
 namespace Student_Planner.Models
 {
@@ -35,7 +36,7 @@ namespace Student_Planner.Models
                 }
                 else
                 {
-                    throw new ArgumentException("Invalid name format.");
+                    throw new CharacterException("Invalid name format.");
                 }
             }
         }
