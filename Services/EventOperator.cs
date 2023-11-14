@@ -1,4 +1,6 @@
-﻿using Student_Planner.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Student_Planner.Databases;
+using Student_Planner.Models;
 
 namespace Student_Planner.Services
 {
@@ -26,6 +28,7 @@ namespace Student_Planner.Services
                     // Serialize the updated events in the same day's JSON file
                     string dayJsonFilePath = Path.Combine(filePath, string.Concat(existingEvent.BeginDate.Date.ToString("yyyy-MM-dd"), ".json"));
                     jsonHandler.SerializeToJson(dayJsonFilePath, existingDay.events);
+
                 }
             }
             return updatedEvent;

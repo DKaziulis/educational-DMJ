@@ -8,13 +8,16 @@ using System.Globalization;
 using System.Text.Json.Serialization;
 using System.Composition;
 using Student_Planner.Enums;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Student_Planner.Databases;
 
 namespace Student_Planner.Controllers
 {
 
-
     public class EventsController : Controller
     {
+        //Must add as a separate enum and make it something like: event urgency or type (i.e. lesson/conference, personal entry etc.) 
         public enum CourseGroup
         {
             Group1,
@@ -24,7 +27,11 @@ namespace Student_Planner.Controllers
             Group5,
             AllGroups
         }
-
+        private readonly EventsDBContext _dbContext;
+        public EventsController(EventsDBContext context)
+        {
+            _dbContext = context;
+        }
         private static List<Event> events = new List<Event>();
         private static List<Day> days = new List<Day>();
         private static readonly string eventDataFilePath = Path.GetFullPath(Path.Combine(
@@ -35,17 +42,16 @@ namespace Student_Planner.Controllers
         public ActionResult Index()
         {
             days = DayHandler.LoadDays(days, eventDataFilePath);
-
             foreach (Day day in days)
             {
                 completePath = Path.Combine(eventDataFilePath, string.Concat(day.Date.ToString("yyyy-MM-dd"), ".json"));
-                day.events = jsonHandler.DeserializeFromJSON(completePath);
+                day.events = _dbContext.Events.ToList();
             }
             completePath = eventDataFilePath;
 
             // Filter the days that have upcoming events and order them by start time.
             var dates = days.SortDays(DaySortKey.NumOfEvents, eventSortKey: EventSortKey.StartTime);
-
+            
             return View(dates);
         }
 
@@ -59,6 +65,8 @@ namespace Student_Planner.Controllers
         {
             if (ModelState.IsValid)
             {
+                _dbContext.Events.Add(newEvent);
+                _dbContext.SaveChanges();
                 //Takes the short date (yyyy-MM-dd) of the passed event, and converts it to DateOnly
                 newEvent.StartTime = TimeOnly.FromDateTime(newEvent.BeginDate);
                 DateOnly tempShortDate = DateOnly.FromDateTime(newEvent.BeginDate);

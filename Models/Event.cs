@@ -1,5 +1,9 @@
-﻿using Student_Planner.Controllers;
+﻿using Microsoft.EntityFrameworkCore;
+using Student_Planner.Controllers;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Student_Planner.Services;
 
 namespace Student_Planner.Models
 {
