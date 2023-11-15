@@ -6,9 +6,8 @@ namespace Student_Planner.Services
 {
     public class EventOperator
     {
-        public static Event EditEvent(Day? existingDay, Event updatedEvent, string filePath)
+        public static Event EditEvent(Day? existingDay, Event updatedEvent)
         {
-            JsonHandler<Event> jsonHandler = new JsonHandler<Event>();
             if (existingDay != null && existingDay.events != null)
             {
                 var existingEvent = existingDay.events.FirstOrDefault(e => e.Id == updatedEvent.Id);
@@ -24,11 +23,6 @@ namespace Student_Planner.Services
                     existingEvent.StartTime = updatedEvent.StartTime;
                     existingEvent.CourseGroup = updatedEvent.CourseGroup;
                     existingEvent.Description = updatedEvent.Description;
-
-                    // Serialize the updated events in the same day's JSON file
-                    string dayJsonFilePath = Path.Combine(filePath, string.Concat(existingEvent.BeginDate.Date.ToString("yyyy-MM-dd"), ".json"));
-                    jsonHandler.SerializeToJson(dayJsonFilePath, existingDay.events);
-
                 }
             }
             return updatedEvent;

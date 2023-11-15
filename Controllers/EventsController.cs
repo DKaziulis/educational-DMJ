@@ -41,20 +41,8 @@ namespace Student_Planner.Controllers
 
         public ActionResult Index()
         {
-            days = null;
             days = _dbContext.Day.ToList();
             events = _dbContext.Events.ToList();
-
-            foreach (Day day in days)
-            {
-                foreach (Event _event in events)
-                {
-                    if(day.Id == _event.DayId)
-                    {
-                        day.events.Add(_event);
-                    }
-                }
-            }
 
             // Filter the days that have upcoming events and order them by start time.
             var dates = days.SortDays(DaySortKey.NumOfEvents, eventSortKey: EventSortKey.StartTime);
@@ -146,7 +134,9 @@ namespace Student_Planner.Controllers
                 var existingDay = days.FirstOrDefault(d => d.Date == dayId);
 
                 //updates the event properties and saves to json file
-                updatedEvent = EventOperator.EditEvent(existingDay, updatedEvent, eventDataFilePath);
+                updatedEvent = EventOperator.EditEvent(existingDay, updatedEvent);
+
+                _dbContext.SaveChanges();
 
                 return RedirectToAction("Index");
             }
