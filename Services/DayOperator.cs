@@ -2,7 +2,7 @@
 
 namespace Student_Planner.Services
 {
-    public class DayHandler
+    public class DayOperator
     {
         //Loads the list of all existing dates from json files in the specified File Path
         public static List<Day> LoadDays(List<Day> days, string filePath)

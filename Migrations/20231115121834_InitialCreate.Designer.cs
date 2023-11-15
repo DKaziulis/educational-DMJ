@@ -12,8 +12,8 @@ using Student_Planner.Databases;
 namespace Student_Planner.Migrations
 {
     [DbContext(typeof(EventsDBContext))]
-    [Migration("20231114135245_ConvertedOnlys")]
-    partial class ConvertedOnlys
+    [Migration("20231115121834_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,25 @@ namespace Student_Planner.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Student_Planner.Models.Day", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateOnly>("Date")
+                        .HasColumnType("date");
+
+                    b.Property<int>("NumOfEvents")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Day");
+                });
 
             modelBuilder.Entity("Student_Planner.Models.Event", b =>
                 {
@@ -37,6 +56,9 @@ namespace Student_Planner.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<int>("CourseGroup")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DayId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
@@ -57,7 +79,25 @@ namespace Student_Planner.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DayId");
+
                     b.ToTable("Events");
+                });
+
+            modelBuilder.Entity("Student_Planner.Models.Event", b =>
+                {
+                    b.HasOne("Student_Planner.Models.Day", "Day")
+                        .WithMany("events")
+                        .HasForeignKey("DayId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Day");
+                });
+
+            modelBuilder.Entity("Student_Planner.Models.Day", b =>
+                {
+                    b.Navigation("events");
                 });
 #pragma warning restore 612, 618
         }

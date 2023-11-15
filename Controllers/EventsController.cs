@@ -33,7 +33,7 @@ namespace Student_Planner.Controllers
             _dbContext = context;
         }
         private static List<Event> events = new List<Event>();
-        private static List<Day> days = new List<Day>();
+        private static List<Day>? days = new List<Day>();
         private static readonly string eventDataFilePath = Path.GetFullPath(Path.Combine(
             Directory.GetCurrentDirectory(), "EventData"));
         private static string completePath = eventDataFilePath;
@@ -41,13 +41,20 @@ namespace Student_Planner.Controllers
 
         public ActionResult Index()
         {
-            days = DayHandler.LoadDays(days, eventDataFilePath);
+            days = null;
+            days = _dbContext.Day.ToList();
+            events = _dbContext.Events.ToList();
+
             foreach (Day day in days)
             {
-                completePath = Path.Combine(eventDataFilePath, string.Concat(day.Date.ToString("yyyy-MM-dd"), ".json"));
-                day.events = _dbContext.Events.ToList();
+                foreach (Event _event in events)
+                {
+                    if(day.Id == _event.DayId)
+                    {
+                        day.events.Add(_event);
+                    }
+                }
             }
-            completePath = eventDataFilePath;
 
             // Filter the days that have upcoming events and order them by start time.
             var dates = days.SortDays(DaySortKey.NumOfEvents, eventSortKey: EventSortKey.StartTime);
@@ -65,42 +72,40 @@ namespace Student_Planner.Controllers
         {
             if (ModelState.IsValid)
             {
-                _dbContext.Events.Add(newEvent);
-                _dbContext.SaveChanges();
                 //Takes the short date (yyyy-MM-dd) of the passed event, and converts it to DateOnly
                 newEvent.StartTime = TimeOnly.FromDateTime(newEvent.BeginDate);
                 DateOnly tempShortDate = DateOnly.FromDateTime(newEvent.BeginDate);
 
                 //Checks which day to create the event for
-                Day? updatedDay = DayHandler.FindDayForEvent(days, tempShortDate);
+                Day? updatedDay = DayOperator.FindDayForEvent(days, tempShortDate);
 
-                //If such a date exists, assigns the complete path to the date's file
+                //If such a date exists
                 if (updatedDay != null && updatedDay.events != null)
                 {
                     updatedDay.events.Add(newEvent);
-                    completePath = Path.Combine(eventDataFilePath, string.Concat(updatedDay.Date.ToString("yyyy-MM-dd"), ".json"));
                 }
                 
-                //If there is no such date, creates a new one, as well as the file for it, and
-                //assigns the new event data to that file
+                //If there is no such date, creates a new one
                 else
                 {
                     updatedDay = new Day {
+                        Id = Convert.ToInt32(tempShortDate.ToString("yyyyMMdd")),
                         Date = tempShortDate,
                         events = new List<Event> { newEvent }
                     };
-                    days.Add(updatedDay);
-                    completePath = Path.Combine(completePath, string.Concat(updatedDay.Date.ToString("yyyy-MM-dd"), ".json"));
-                    System.IO.File.Create(completePath).Close();
+                    _dbContext.Day.Add(updatedDay);
                 }
 
-                //Creates a unique ID, which consists of the event Date info, and the serial number of the day's events
-                if(updatedDay.events != null)
-                {
-                    string customId = updatedDay.Date.ToString("yyyyMMdd") + updatedDay.events.Count.ToString();
-                    newEvent.Id = Convert.ToInt32(customId); // unique ID
+                newEvent.DayId = updatedDay.Id;
 
-                    jsonHandler.SerializeToJson(completePath, updatedDay.events);
+                //Creates a unique ID, which consists of the event Date info, and the serial number of the day's events
+                if (updatedDay.events != null)
+                {
+                    string customId = updatedDay.Id.ToString() + updatedDay.events.Count.ToString();
+                    newEvent.Id = Convert.ToInt32(customId);
+
+                    _dbContext.Events.Add(newEvent);
+                    _dbContext.SaveChanges();
                 }
                 else
                 {
@@ -172,6 +177,8 @@ namespace Student_Planner.Controllers
                 var existingEvent = existingDay.events.FirstOrDefault(e => e.Id == id);
                 if (existingEvent != null)
                 {
+                    _dbContext.Remove(existingEvent);
+                    _dbContext.SaveChanges();
                     //updates the day's event list or deletes it if the list is empty
                     existingDay = EventOperator.DeleteEvent(existingDay, existingEvent, eventDataFilePath);
                     return RedirectToAction("Index");

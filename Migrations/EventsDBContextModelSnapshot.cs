@@ -22,6 +22,25 @@ namespace Student_Planner.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Student_Planner.Models.Day", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateOnly>("Date")
+                        .HasColumnType("date");
+
+                    b.Property<int>("NumOfEvents")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Day", (string)null);
+                });
+
             modelBuilder.Entity("Student_Planner.Models.Event", b =>
                 {
                     b.Property<int>("Id")
@@ -34,6 +53,9 @@ namespace Student_Planner.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<int>("CourseGroup")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DayId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
@@ -54,7 +76,25 @@ namespace Student_Planner.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Events");
+                    b.HasIndex("DayId");
+
+                    b.ToTable("Events", (string)null);
+                });
+
+            modelBuilder.Entity("Student_Planner.Models.Event", b =>
+                {
+                    b.HasOne("Student_Planner.Models.Day", "Day")
+                        .WithMany("events")
+                        .HasForeignKey("DayId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Day");
+                });
+
+            modelBuilder.Entity("Student_Planner.Models.Day", b =>
+                {
+                    b.Navigation("events");
                 });
 #pragma warning restore 612, 618
         }

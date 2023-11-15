@@ -6,11 +6,19 @@ namespace Student_Planner.Databases
 {
     public class EventsDBContext : DbContext
     {
+        public DbSet<Event> Events { get; set; }
+        public DbSet<Day> Day { get; set; }
         public EventsDBContext(DbContextOptions<EventsDBContext> options) : base(options)
         {
 
         }
-        public DbSet<Event> Events { get; set; }
-        public DbSet<Day> Days { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Event>()
+                .HasOne(e => e.Day)
+                .WithMany(d => d.events)
+                .HasForeignKey(e => e.DayId);
+        }
     }
 }

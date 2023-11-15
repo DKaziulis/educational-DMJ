@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <Folder Include="EventData\" />
+    <Folder Include="Migrations\" />
     <Folder Include="ReadFiles\" />
   </ItemGroup>
 
