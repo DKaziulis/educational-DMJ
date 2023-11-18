@@ -1,5 +1,8 @@
 ﻿using Student_Planner.Controllers;
 using System.ComponentModel.DataAnnotations;
+using System.Text.RegularExpressions;
+using System.Xml.Linq;
+using Student_Planner.Models.Exceptions;
 
 namespace Student_Planner.Models
 {
@@ -16,7 +19,26 @@ namespace Student_Planner.Models
         }
         public int Id { get; set; }
         [MaxLength(60)]
-        public string? Name { get; set; }
+        private string? name;
+        public string? Name
+        {
+            get { return name; }
+            set
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    name = value;
+                }
+                else if (Regex.IsMatch(value, @"^[A-Za-z0-9\s-]+$"))
+                {
+                    name = value;
+                }
+                else
+                {
+                    throw new CharacterException("Invalid name format.");
+                }
+            }
+        }
         public DateTime BeginDate { get; set; }
         public TimeOnly StartTime { get; set; }
         public TimeOnly EndTime { get; set; }
