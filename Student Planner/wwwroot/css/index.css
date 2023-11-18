@@ -1,0 +1,78 @@
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+        font-family: sans-serif;
+        color: white;
+    }
+}
+
+
+
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+    background-image: url("mkic-pagrindinis.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+
+.text-center {
+    display:flex;
+    justify-content: center;
+    align-items: baseline;
+    height: 100vh; /* Full viewport height */
+    flex-direction:column;
+    margin-top: -200px;
+}
+
+.text-center > * {
+    margin: 40px;
+}
+
+
+#text-box {
+    border: 1px solid white; 
+    padding: 12px 12px; 
+    font-size: 18px; 
+    width: 500px; 
+    border-radius: 4px; /* rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+    text-align: justify;
+}
+
+#date-box {
+    border: 1px solid white;
+    padding: 8px 8px;
+    font-size: 16px;
+    width: 140px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    position: absolute;
+    top: 100px;
+    right: 40px;
+    
+}
+
+#date-box p {
+    margin: 0px;
+    
+}
