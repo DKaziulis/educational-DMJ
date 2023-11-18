@@ -6,7 +6,7 @@ using Student_Planner.Models.Exceptions;
 
 namespace Student_Planner.Models
 {
-    public class Event
+    public class Event : IComparable<Event>
     {
         public Event() { }
         public Event(string? name, DateTime beginDate, TimeOnly eventEndTime, string? description, TimeDuration.Time eventDuration)
@@ -35,7 +35,7 @@ namespace Student_Planner.Models
                 }
                 else
                 {
-                    throw new CharacterException("Invalid name format.");
+                      throw new CharacterException("Invalid name format.");
                 }
             }
         }
@@ -53,6 +53,16 @@ namespace Student_Planner.Models
         {
             // Calculate event duration based on BeginDate and EventEndTime
             return EndTime - StartTime;
+        }
+        public int CompareTo(Event? other)
+        {
+            if (other == null)
+            {
+                return 1;
+            }
+
+            // Compare based on the BeginDate property
+            return BeginDate.CompareTo(other.BeginDate);
         }
     }
 }
