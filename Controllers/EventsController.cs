@@ -167,9 +167,14 @@ namespace Student_Planner.Controllers
                 var existingEvent = existingDay.events.FirstOrDefault(e => e.Id == id);
                 if (existingEvent != null)
                 {
+                    existingDay.events.Remove(existingEvent);
                     _dbContext.Remove(existingEvent);
-                    _dbContext.SaveChanges();
                     //updates the day's event list or deletes it if the list is empty
+                    if (existingDay.events.Count == 0)
+                        _dbContext.Remove(existingDay);
+
+                    _dbContext.SaveChanges();
+
                     existingDay = EventOperator.DeleteEvent(existingDay, existingEvent, eventDataFilePath);
                     return RedirectToAction("Index");
                 }
