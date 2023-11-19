@@ -1,6 +1,6 @@
 ﻿namespace Student_Planner.Models
 {
-    public class Day
+    public class Day : IComparable<Day>
     {
         public DateOnly Date{ get; set; }
         public int NumOfEvents { get; set; }
@@ -10,6 +10,15 @@
         {
             this.Date = Date;
             this.events = events;
+        }
+        public int CompareTo(Day? other)
+        {
+            if (other == null)
+            {
+                return 1;
+            }
+
+            return Date.CompareTo(other.Date);
         }
     }
 }
