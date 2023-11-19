@@ -105,10 +105,10 @@ namespace Student_Planner.Controllers
             return View(newEvent);
         }
 
-        public ActionResult Edit(int id, DateOnly dayId)
+        public ActionResult Edit(int id, DateOnly dayDate)
         {
             //Checks for the correct Date, and event ID to edit the event
-            var existingDay = days.FirstOrDefault(d => d.Date == dayId);
+            var existingDay = days.FirstOrDefault(d => d.Date == dayDate);
             if (existingDay != null && existingDay.events != null)
             {
                 var existingEvent = existingDay.events.FirstOrDefault(e => e.Id == id);
@@ -127,41 +127,62 @@ namespace Student_Planner.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(Event updatedEvent, DateOnly dayId)
+        public ActionResult Edit(Event updatedEvent, DateOnly dayDate)
         {
+            var existingDay = _dbContext.Day
+                   .Include(d => d.events)
+                   .FirstOrDefault(d => d.Date == dayDate);
             if (ModelState.IsValid)
             {
-                var existingDay = days.FirstOrDefault(d => d.Date == dayId);
-
+                 //days.FirstOrDefault(d => d.Date == dayId);
                 //updates the event properties and saves to json file
                 updatedEvent = EventOperator.EditEvent(existingDay, updatedEvent);
+                Console.WriteLine(existingDay.ToString());
 
                 _dbContext.SaveChanges();
 
                 return RedirectToAction("Index");
             }
+            else
+            {
+                Console.WriteLine(dayDate);
+                foreach (var modelError in ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    // Log or debug the model errors
+                    Console.WriteLine(modelError.ErrorMessage);
+                }
+
+                return View(updatedEvent);
+            }
             return View(updatedEvent);
         }
 
 
-        public ActionResult Delete(int id, DateOnly dayId)
+        public ActionResult Delete(int id, DateOnly dayDate)
         {
             //Checks for the correct Date, and event ID to delete the event
-            var existingDay = days.FirstOrDefault(d => d.Date == dayId);
+            Console.WriteLine(dayDate);
+            Console.WriteLine(id);
+
+            var existingDay = days.FirstOrDefault(d => d.Date == dayDate);
             if(existingDay != null && existingDay.events != null)
             {
                 var existingEvent = existingDay.events.FirstOrDefault(e => e.Id == id);
 
                 return View(existingEvent);
             }
-            return NotFound(); 
+            return NotFound();
         }
 
         [HttpPost, ActionName("DeleteConfirmed")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id, DateOnly dayId)
+        public ActionResult DeleteConfirmed(int id, int dayId)
         {
-            var existingDay = days.FirstOrDefault(d => d.Date == dayId);
+            Console.WriteLine(dayId);
+            Console.WriteLine(id);
+
+            var existingDay = days.FirstOrDefault(d => d.Id == dayId);
+
             if (existingDay != null && existingDay.events != null)
             {
                 var existingEvent = existingDay.events.FirstOrDefault(e => e.Id == id);
@@ -170,15 +191,12 @@ namespace Student_Planner.Controllers
                     _dbContext.Remove(existingEvent);
                     existingDay.events.Remove(existingEvent);
                     //updates the day's event list or deletes it if the list is empty
-                    Console.WriteLine(existingDay.events.Count);
                     if (existingDay.events.Count == 0)
                     {
                         _dbContext.Remove(existingDay);
-                        Console.WriteLine(existingDay.events.Count);
                     }
                     _dbContext.SaveChanges();
 
-                    existingDay = EventOperator.DeleteEvent(existingDay, existingEvent, eventDataFilePath);
                     return RedirectToAction("Index");
                 }
             }

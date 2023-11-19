@@ -33,9 +33,11 @@
 </dl>
 
 
-@using (Html.BeginForm("DeleteConfirmed", "Events", new { id = Model.Id, dayId = DateOnly.FromDateTime(Model.BeginDate) }, FormMethod.Post))
+@using (Html.BeginForm("DeleteConfirmed", "Events", new { id = Model.Id }, FormMethod.Post))
 {
     @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(model => model.DayId)
 
     <div >
         <button type="submit" style="margin-right: 100px;" class="btn btn-danger">Delete</button>
