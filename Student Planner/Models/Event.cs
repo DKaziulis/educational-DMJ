@@ -48,7 +48,7 @@ namespace Student_Planner.Models
             get { return CalculateEventDuration(); }
             set { }
         }
-        public EventsController.CourseGroup CourseGroup { get; set; }
+
         private TimeSpan CalculateEventDuration()
         {
             // Calculate event duration based on BeginDate and EventEndTime
