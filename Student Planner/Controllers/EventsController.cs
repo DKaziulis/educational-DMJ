@@ -11,8 +11,6 @@ using Student_Planner.Enums;
 
 namespace Student_Planner.Controllers
 {
-
-
     public class EventsController : Controller
     {
 
