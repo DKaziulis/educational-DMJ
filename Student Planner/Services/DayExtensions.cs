@@ -19,14 +19,14 @@ namespace Student_Planner.Services
             }
 
             return days
-            .OrderBy(d => property.GetValue(d))
-            .Select(day => new Day
-            {
-                Date = day.Date,
-                NumOfEvents = day.NumOfEvents,
-                events = day.events?.SortEvents(sortKey: eventSortKey)
-            })
-            .ToList();
+                .OrderBy(d => property.GetValue(d))
+                .Select(day => new Day
+                {
+                    Date = day.Date,
+                    NumOfEvents = day.NumOfEvents,
+                    events = day.events?.SortEvents(sortKey: eventSortKey)
+                })
+                .ToList();
         }
     }
 }

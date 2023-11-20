@@ -16,7 +16,6 @@
             <th>Name</th>
             <th>StartTime</th>
             <th>Description</th>
-            <th>Group</th> 
             <th>Actions</th>
         </tr>
         @if (item.events != null)
@@ -27,7 +26,6 @@
                     <td>@dayEvent.Name</td>
                     <td>@dayEvent.StartTime.ToString("HH:mm")</td>
                     <td>@dayEvent.Description</td>
-                    <td>@dayEvent.CourseGroup</td>
                     <td>
                         @Html.ActionLink("Edit", "Edit", new { id = dayEvent.Id, dayDate = item.Date }) |
                         @Html.ActionLink("Delete", "Delete", new { id = dayEvent.Id, dayDate = item.Date })

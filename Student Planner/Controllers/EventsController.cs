@@ -14,19 +14,9 @@ using Student_Planner.Databases;
 
 namespace Student_Planner.Controllers
 {
-
     public class EventsController : Controller
     {
-        //Must add as a separate enum and make it something like: event urgency or type (i.e. lesson/conference, personal entry etc.) 
-        public enum CourseGroup
-        {
-            Group1,
-            Group2,
-            Group3,
-            Group4,
-            Group5,
-            AllGroups
-        }
+
         private readonly EventsDBContext _dbContext;
         public EventsController(EventsDBContext context)
         {
@@ -58,11 +48,13 @@ namespace Student_Planner.Controllers
         [HttpPost]
         public ActionResult Create(Event newEvent)
         {
-            if (ModelState.IsValid)
+            try
             {
-                //Takes the short date (yyyy-MM-dd) of the passed event, and converts it to DateOnly
-                newEvent.StartTime = TimeOnly.FromDateTime(newEvent.BeginDate);
-                DateOnly tempShortDate = DateOnly.FromDateTime(newEvent.BeginDate);
+                if (ModelState.IsValid)
+                {
+                    //Takes the short date (yyyy-MM-dd) of the passed event, and converts it to DateOnly
+                    newEvent.StartTime = TimeOnly.FromDateTime(newEvent.BeginDate);
+                    DateOnly tempShortDate = DateOnly.FromDateTime(newEvent.BeginDate);
 
                 //Checks which day to create the event for
                 Day? updatedDay = DayOperator.FindDayForEvent(days, tempShortDate);
@@ -100,7 +92,13 @@ namespace Student_Planner.Controllers
                     return NotFound();
                 }
 
-                return RedirectToAction("Index");
+                    return RedirectToAction("Index");
+                }
+            }
+            catch (ArgumentException ex)
+            {
+                // Catch the exception and set a custom error message in the ModelState
+                ModelState.AddModelError("Name", ex.Message);
             }
             return View(newEvent);
         }

@@ -22,7 +22,6 @@ namespace Student_Planner.Services
                     // Updates event properties
                     existingEvent.Name = updatedEvent.Name;
                     existingEvent.StartTime = updatedEvent.StartTime;
-                    existingEvent.CourseGroup = updatedEvent.CourseGroup;
                     existingEvent.Description = updatedEvent.Description;
                 }
                 return existingEvent;

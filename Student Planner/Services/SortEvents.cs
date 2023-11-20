@@ -9,9 +9,10 @@ namespace Student_Planner.Services
 {
     public static class EventExtensions
     {
-        public static List<Event> SortEvents(this List<Event> events, EventSortKey sortKey = EventSortKey.Name)
+        public static List<T> SortEvents<T>(this List<T> events, EventSortKey sortKey = EventSortKey.Name)
+        where T : class, IComparable<T>, new()
         {
-            PropertyInfo? property = typeof(Event).GetProperty(sortKey.ToString());
+            PropertyInfo? property = typeof(T).GetProperty(sortKey.ToString());
             if (property == null)
             {
                 throw new ArgumentException("Invalid or non-existent sorting key.");
