@@ -19,6 +19,7 @@ namespace Student_Planner.Models
         public DateTime BeginDate { get; set; }
         public TimeOnly StartTime { get; set; }
         public TimeOnly EndTime { get; set; }
+        [NotMapped]
         public TimeDuration.Time EventDuration { get; set; }
         public string? Description { get; set; }
 
