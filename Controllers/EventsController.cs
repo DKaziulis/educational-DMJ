@@ -127,7 +127,7 @@ namespace Student_Planner.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(Event updatedEvent, DateOnly dayDate)
+        public ActionResult Edit(Event? updatedEvent, DateOnly dayDate)
         {
             var existingDay = _dbContext.Day
                    .Include(d => d.events)
@@ -137,22 +137,10 @@ namespace Student_Planner.Controllers
                  //days.FirstOrDefault(d => d.Date == dayId);
                 //updates the event properties and saves to json file
                 updatedEvent = EventOperator.EditEvent(existingDay, updatedEvent);
-                Console.WriteLine(existingDay.ToString());
 
                 _dbContext.SaveChanges();
 
                 return RedirectToAction("Index");
-            }
-            else
-            {
-                Console.WriteLine(dayDate);
-                foreach (var modelError in ModelState.Values.SelectMany(v => v.Errors))
-                {
-                    // Log or debug the model errors
-                    Console.WriteLine(modelError.ErrorMessage);
-                }
-
-                return View(updatedEvent);
             }
             return View(updatedEvent);
         }
@@ -161,9 +149,6 @@ namespace Student_Planner.Controllers
         public ActionResult Delete(int id, DateOnly dayDate)
         {
             //Checks for the correct Date, and event ID to delete the event
-            Console.WriteLine(dayDate);
-            Console.WriteLine(id);
-
             var existingDay = days.FirstOrDefault(d => d.Date == dayDate);
             if(existingDay != null && existingDay.events != null)
             {
@@ -178,9 +163,6 @@ namespace Student_Planner.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id, int dayId)
         {
-            Console.WriteLine(dayId);
-            Console.WriteLine(id);
-
             var existingDay = days.FirstOrDefault(d => d.Id == dayId);
 
             if (existingDay != null && existingDay.events != null)
