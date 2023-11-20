@@ -8,18 +8,23 @@ using System.Reflection;
 
 namespace Student_Planner.Services
 {
+    // Define a delegate for sorting
+    public delegate IOrderedEnumerable<Day> DaySortDelegate(List<Day> days);
+
     public static class DayExtensions
     {
-        public static List<Day> SortDays(this List<Day> days, DaySortKey daySortKey = DaySortKey.Date, EventSortKey eventSortKey = EventSortKey.Name)
+        // Modify SortDays to accept a delegate for custom sorting
+        public static List<Day> SortDays(
+            this List<Day> days,
+            DaySortDelegate daySortDelegate,
+            EventSortKey eventSortKey = EventSortKey.Name)
         {
-            PropertyInfo? property = typeof(Day).GetProperty(daySortKey.ToString());
-            if (property == null)
+            if (daySortDelegate == null)
             {
-                throw new ArgumentException("Invalid or non-existent sorting key.");
+                throw new ArgumentNullException(nameof(daySortDelegate));
             }
 
-            return days
-                .OrderBy(d => property.GetValue(d))
+            return daySortDelegate(days)
                 .Select(day => new Day
                 {
                     Date = day.Date,
@@ -27,6 +32,18 @@ namespace Student_Planner.Services
                     events = day.events?.SortEvents(sortKey: eventSortKey)
                 })
                 .ToList();
+        }
+
+        // Example delegate method for sorting by Date
+        public static IOrderedEnumerable<Day> SortByDate(List<Day> days)
+        {
+            return days.OrderBy(d => d.Date);
+        }
+
+        // Example delegate method for sorting by NumOfEvents
+        public static IOrderedEnumerable<Day> SortByNumOfEvents(List<Day> days)
+        {
+            return days.OrderBy(d => d.NumOfEvents);
         }
     }
 }

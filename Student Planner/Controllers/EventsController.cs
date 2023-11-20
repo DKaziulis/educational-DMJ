@@ -57,7 +57,7 @@ namespace Student_Planner.Controllers
                     DateOnly tempShortDate = DateOnly.FromDateTime(newEvent.BeginDate);
 
                 //Checks which day to create the event for
-                Day? updatedDay = DayOperator.FindDayForEvent(days, tempShortDate);
+                Day? updatedDay = DayOperator.FindDayForEvent(tempShortDate);
 
                 //If such a date exists
                 if (updatedDay != null && updatedDay.events != null)
