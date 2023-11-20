@@ -16,10 +16,10 @@ namespace Student_Planner.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }     //Primary key for the Event entity
         [MaxLength(60)]
-        public string? Name { get; set; }
         public DateTime BeginDate { get; set; }
         public TimeOnly StartTime { get; set; }
         public TimeOnly EndTime { get; set; }
+        public TimeDuration.Time EventDuration { get; set; }
         public string? Description { get; set; }
 
         public int DayId { get; set; }
@@ -32,9 +32,8 @@ namespace Student_Planner.Models
             BeginDate = beginDate;
             EndTime = eventEndTime;
             Description = description;
-            EventDuration = eventDuration.ToTimeSpan();
+            //EventDuration = eventDuration.ToTimeSpan();
         }
-        public int Id { get; set; }
         [MaxLength(60)]
         private string? name;
         public string? Name
@@ -52,20 +51,10 @@ namespace Student_Planner.Models
                 }
                 else
                 {
-                      throw new CharacterException("Invalid name format.");
+                    throw new CharacterException("Invalid name format.");
                 }
             }
         }
-        public DateTime BeginDate { get; set; }
-        public TimeOnly StartTime { get; set; }
-        public TimeOnly EndTime { get; set; }
-        public string? Description { get; set; }
-        public TimeSpan EventDuration
-        {
-            get { return CalculateEventDuration(); }
-            set { }
-        }
-
         private TimeSpan CalculateEventDuration()
         {
             // Calculate event duration based on BeginDate and EventEndTime
