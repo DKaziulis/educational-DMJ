@@ -27,8 +27,8 @@
                     <td>@dayEvent.StartTime.ToString("HH:mm")</td>
                     <td>@dayEvent.Description</td>
                     <td>
-                        @Html.ActionLink("Edit", "Edit", new { id = dayEvent.Id, dayId = item.Date }) |
-                        @Html.ActionLink("Delete", "Delete", new { id = dayEvent.Id, dayId = item.Date })
+                        @Html.ActionLink("Edit", "Edit", new { id = dayEvent.Id, dayDate = item.Date }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = dayEvent.Id, dayDate = item.Date })
                     </td>
                 </tr>
             }

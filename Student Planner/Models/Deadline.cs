@@ -6,9 +6,9 @@ namespace Student_Planner.Models
     public class Deadline : IComparable<Deadline>
     {
         public int Id { get; set; }
-        public string Title { get; set; }
+        public string? Title { get; set; }
         public DateTime DueDate { get; set; }
-        public string Details { get; set; }
+        public string? Details { get; set; }
 
         public Deadline() { }
 
@@ -20,7 +20,7 @@ namespace Student_Planner.Models
             Details = details;
         }
 
-        public int CompareTo(Deadline other)
+        public int CompareTo(Deadline? other)
         {
             if (other == null) return 1;
             return DueDate.CompareTo(other.DueDate);

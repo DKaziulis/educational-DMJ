@@ -8,16 +8,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="EventData\**" />
+    <Compile Remove="ReadFiles\**" />
     <Compile Remove="Upload\**" />
+    <Content Remove="EventData\**" />
+    <Content Remove="ReadFiles\**" />
     <Content Remove="Upload\**" />
+    <EmbeddedResource Remove="EventData\**" />
+    <EmbeddedResource Remove="ReadFiles\**" />
     <EmbeddedResource Remove="Upload\**" />
+    <None Remove="EventData\**" />
+    <None Remove="ReadFiles\**" />
     <None Remove="Upload\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="EventData\" />
-    <Folder Include="Migrations\" />
-    <Folder Include="ReadFiles\" />
+    <Folder Include="Student Planner\Migrations\" />
   </ItemGroup>
 
   <ItemGroup>
