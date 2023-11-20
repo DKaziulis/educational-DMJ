@@ -15,10 +15,10 @@ namespace Student_Planner.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }     //Primary key for the Event entity
-        [MaxLength(60)]
         public DateTime BeginDate { get; set; }
         public TimeOnly StartTime { get; set; }
         public TimeOnly EndTime { get; set; }
+        [NotMapped]
         public TimeDuration.Time EventDuration { get; set; }
         public string? Description { get; set; }
 
@@ -51,7 +51,7 @@ namespace Student_Planner.Models
                 }
                 else
                 {
-                      throw new CharacterException("Invalid name format.");
+                    throw new CharacterException("Invalid name format.");
                 }
             }
         }
