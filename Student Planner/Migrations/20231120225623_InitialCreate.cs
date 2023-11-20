@@ -29,14 +29,12 @@ namespace Student_Planner.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: true),
                     BeginDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     StartTime = table.Column<TimeOnly>(type: "time", nullable: false),
                     EndTime = table.Column<TimeOnly>(type: "time", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DayId = table.Column<int>(type: "int", nullable: false),
-                    EventDuration = table.Column<TimeSpan>(type: "time", nullable: false),
-                    CourseGroup = table.Column<int>(type: "int", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {

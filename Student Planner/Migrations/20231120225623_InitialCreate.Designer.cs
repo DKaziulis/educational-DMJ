@@ -12,7 +12,7 @@ using Student_Planner.Databases;
 namespace Student_Planner.Migrations
 {
     [DbContext(typeof(EventsDBContext))]
-    [Migration("20231115121834_InitialCreate")]
+    [Migration("20231120225623_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -55,9 +55,6 @@ namespace Student_Planner.Migrations
                     b.Property<DateTime>("BeginDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("CourseGroup")
-                        .HasColumnType("int");
-
                     b.Property<int>("DayId")
                         .HasColumnType("int");
 
@@ -67,12 +64,8 @@ namespace Student_Planner.Migrations
                     b.Property<TimeOnly>("EndTime")
                         .HasColumnType("time");
 
-                    b.Property<TimeSpan>("EventDuration")
-                        .HasColumnType("time");
-
                     b.Property<string>("Name")
-                        .HasMaxLength(60)
-                        .HasColumnType("nvarchar(60)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<TimeOnly>("StartTime")
                         .HasColumnType("time");

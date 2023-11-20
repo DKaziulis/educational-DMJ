@@ -38,7 +38,7 @@ namespace Student_Planner.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Day", (string)null);
+                    b.ToTable("Day");
                 });
 
             modelBuilder.Entity("Student_Planner.Models.Event", b =>
@@ -52,9 +52,6 @@ namespace Student_Planner.Migrations
                     b.Property<DateTime>("BeginDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("CourseGroup")
-                        .HasColumnType("int");
-
                     b.Property<int>("DayId")
                         .HasColumnType("int");
 
@@ -64,12 +61,8 @@ namespace Student_Planner.Migrations
                     b.Property<TimeOnly>("EndTime")
                         .HasColumnType("time");
 
-                    b.Property<TimeSpan>("EventDuration")
-                        .HasColumnType("time");
-
                     b.Property<string>("Name")
-                        .HasMaxLength(60)
-                        .HasColumnType("nvarchar(60)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<TimeOnly>("StartTime")
                         .HasColumnType("time");
@@ -78,7 +71,7 @@ namespace Student_Planner.Migrations
 
                     b.HasIndex("DayId");
 
-                    b.ToTable("Events", (string)null);
+                    b.ToTable("Events");
                 });
 
             modelBuilder.Entity("Student_Planner.Models.Event", b =>
