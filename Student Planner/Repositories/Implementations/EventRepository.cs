@@ -16,7 +16,7 @@ namespace Student_Planner.Repositories.Implementations
         {
             return _dbContext.Events.ToList();
         }
-        public Event GetById(int id)
+        public Event? GetById(int id)
         {
             return _dbContext.Events.FirstOrDefault(e => e.Id == id);
         }

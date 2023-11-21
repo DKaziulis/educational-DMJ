@@ -15,7 +15,7 @@ namespace Student_Planner.Repositories.Implementations
         public IEnumerable<Day> GetAll() {
             return _dbContext.Days.ToList();
         }
-        public Day GetById(int id) {
+        public Day? GetById(int id) {
             return _dbContext.Days.FirstOrDefault(d => d.Id == id);
         }
         public void Add(Day day)

@@ -78,5 +78,17 @@ namespace Student_Planner.Services
                 _eventRepository.SaveChanges();
             }
         }
+        public void DeleteEvent(Event existingEvent, Day existingDay)
+        {
+            int tempId = existingEvent.DayId;
+            _eventRepository.Delete(existingEvent);
+
+            //checks if another Event with the current Day's Id exists, if not, deletes the Day
+            if (_eventRepository.GetById(tempId) == null)
+            {
+                _dayRepository.Delete(existingDay);
+            }
+            _dayRepository.SaveChanges();
+        }
     }
 }

@@ -11,34 +11,31 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Student_Planner.Databases;
 using Student_Planner.Repositories;
 using Student_Planner.Repositories.Interfaces;
+using Microsoft.VisualBasic;
 
 namespace Student_Planner.Controllers
 {
     public class EventsController : Controller
     {
-        private readonly EventsDBContext _dbContext;
         private readonly IDayRepository _dayRepository;
         private readonly IEventRepository _eventRepository;
         private readonly EventServices _eventServices;
-        public EventsController(EventsDBContext context, IDayRepository dayRepository, IEventRepository eventRepository, EventServices eventServices)
+        public EventsController(IDayRepository dayRepository, IEventRepository eventRepository, EventServices eventServices)
         {
-            _dbContext = context;
             _dayRepository = dayRepository;
             _eventRepository = eventRepository;
             _eventServices = eventServices;
         }
-        private static List<Event> events = new List<Event>();
-        private static List<Day>? days = new List<Day>();
 
         public ActionResult Index()
         {
-            days = (List<Day>?)_dayRepository.GetAll();
-            events = _dbContext.Events.ToList();
+            var days = (List<Day>?)_dayRepository.GetAll();
+            _ = _eventRepository.GetAll();
 
             // Filter the days that have upcoming events and order them by start time.
-            var dates = days.SortDays(DaySortKey.NumOfEvents, eventSortKey: EventSortKey.StartTime);
+            days?.SortDays(DaySortKey.Date, eventSortKey: EventSortKey.StartTime);
             
-            return View(dates);
+            return View(days);
         }
 
         public ActionResult Create()
@@ -60,7 +57,6 @@ namespace Student_Planner.Controllers
             }
             catch (ArgumentException ex)
             {
-                // Catch the exception and set a custom error message in the ModelState
                 ModelState.AddModelError("Name", ex.Message);
             }
             return View(newEvent);
@@ -68,8 +64,8 @@ namespace Student_Planner.Controllers
 
         public ActionResult Edit(int id, DateOnly dayDate)
         {
-            //Checks for the correct Date, and event ID to edit the event
             var existingDay = _dayRepository.GetByDate(dayDate);
+
             if (existingDay != null)
             {
                 var existingEvent = _eventRepository.GetById(id);
@@ -85,7 +81,8 @@ namespace Student_Planner.Controllers
         [HttpPost]
         public ActionResult Edit(Event updatedEvent, DateOnly dayDate)
         {
-            var existingDay = _dayRepository.GetByDate(dayDate); 
+            var existingDay = _dayRepository.GetByDate(dayDate);
+            
             if (ModelState.IsValid)
             {
                 _eventServices.EditEvent(existingDay, updatedEvent);
@@ -97,36 +94,33 @@ namespace Student_Planner.Controllers
 
         public ActionResult Delete(int id, DateOnly dayDate)
         {
-            //Checks for the correct Date, and event ID to delete the event
-            var existingDay = days.FirstOrDefault(d => d.Date == dayDate);
-            if(existingDay != null && existingDay.events != null)
+            var existingDay = _dayRepository.GetByDate(dayDate);
+
+            if(existingDay != null)
             {
-                var existingEvent = existingDay.events.FirstOrDefault(e => e.Id == id);
+                var existingEvent = _eventRepository.GetById(id);
 
                 return View(existingEvent);
             }
-            return NotFound();
+            else
+            {
+                throw new ArgumentException("Day not found/Events is null");
+            }
         }
 
         [HttpPost, ActionName("DeleteConfirmed")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id, int dayId)
         {
-            var existingDay = days.FirstOrDefault(d => d.Id == dayId);
+            var existingDay = _dayRepository.GetById(dayId);
 
-            if (existingDay != null && existingDay.events != null)
+            if (existingDay != null)
             {
-                var existingEvent = existingDay.events.FirstOrDefault(e => e.Id == id);
+                var existingEvent = _eventRepository.GetById(id);
+
                 if (existingEvent != null)
                 {
-                    _dbContext.Remove(existingEvent);
-                    existingDay.events.Remove(existingEvent);
-                    //updates the day's event list or deletes it if the list is empty
-                    if (existingDay.events.Count == 0)
-                    {
-                        _dbContext.Remove(existingDay);
-                    }
-                    _dbContext.SaveChanges();
+                    _eventServices.DeleteEvent(existingEvent, existingDay);
 
                     return RedirectToAction("Index");
                 }
