@@ -32,5 +32,9 @@ namespace Student_Planner.Repositories.Implementations
         {
             _dbContext.Events.Remove(_event);
         }
+        public void SaveChanges()
+        {
+            _dbContext.SaveChanges();
+        }
     }
 }

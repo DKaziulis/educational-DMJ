@@ -19,11 +19,13 @@ namespace Student_Planner.Controllers
         private readonly EventsDBContext _dbContext;
         private readonly IDayRepository _dayRepository;
         private readonly IEventRepository _eventRepository;
-        public EventsController(EventsDBContext context, IDayRepository dayRepository, IEventRepository eventRepository)
+        private readonly EventServices _eventServices;
+        public EventsController(EventsDBContext context, IDayRepository dayRepository, IEventRepository eventRepository, EventServices eventServices)
         {
             _dbContext = context;
             _dayRepository = dayRepository;
             _eventRepository = eventRepository;
+            _eventServices = eventServices;
         }
         private static List<Event> events = new List<Event>();
         private static List<Day>? days = new List<Day>();
@@ -51,45 +53,7 @@ namespace Student_Planner.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    //Takes the short date (yyyy-MM-dd) of the passed event, and converts it to DateOnly
-                    newEvent.StartTime = TimeOnly.FromDateTime(newEvent.BeginDate);
-                    DateOnly tempShortDate = DateOnly.FromDateTime(newEvent.BeginDate);
-
-                //Checks which day to create the event for
-                Day? updatedDay = DayOperator.FindDayForEvent(tempShortDate);
-
-                //If such a date exists
-                if (updatedDay != null && updatedDay.events != null)
-                {
-                    updatedDay.events.Add(newEvent);
-                }
-                
-                //If there is no such date, creates a new one
-                else
-                {
-                    updatedDay = new Day {
-                        Id = Convert.ToInt32(tempShortDate.ToString("yyyyMMdd")),
-                        Date = tempShortDate,
-                        events = new List<Event> { newEvent }
-                    };
-                    _dbContext.Days.Add(updatedDay);
-                }
-
-                newEvent.DayId = updatedDay.Id;
-
-                //Creates a unique ID, which consists of the event Date info, and the serial number of the day's events
-                if (updatedDay.events != null)
-                {
-                    string customId = updatedDay.Id.ToString() + updatedDay.events.Count.ToString();
-                    newEvent.Id = Convert.ToInt32(customId);
-
-                    _dbContext.Events.Add(newEvent);
-                    _dbContext.SaveChanges();
-                }
-                else
-                {
-                    return NotFound();
-                }
+                    _eventServices.CreateEvent(newEvent);
 
                     return RedirectToAction("Index");
                 }
@@ -105,43 +69,31 @@ namespace Student_Planner.Controllers
         public ActionResult Edit(int id, DateOnly dayDate)
         {
             //Checks for the correct Date, and event ID to edit the event
-            var existingDay = days.FirstOrDefault(d => d.Date == dayDate);
-            if (existingDay != null && existingDay.events != null)
+            var existingDay = _dayRepository.GetByDate(dayDate);
+            if (existingDay != null)
             {
-                var existingEvent = existingDay.events.FirstOrDefault(e => e.Id == id);
-                
-                if (existingEvent == null)
-                {
-                    return NotFound();
-                }
+                var existingEvent = _eventRepository.GetById(id);
 
                 return View(existingEvent);
             } 
             else 
-            {  
-                return NotFound(); 
+            {
+                throw new ArgumentException("Day not found/Events is null");
             }
         }
 
         [HttpPost]
-        public ActionResult Edit(Event? updatedEvent, DateOnly dayDate)
+        public ActionResult Edit(Event updatedEvent, DateOnly dayDate)
         {
-            var existingDay = _dbContext.Days
-                   .Include(d => d.events)
-                   .FirstOrDefault(d => d.Date == dayDate);
+            var existingDay = _dayRepository.GetByDate(dayDate); 
             if (ModelState.IsValid)
             {
-                 //days.FirstOrDefault(d => d.Date == dayId);
-                //updates the event properties and saves to json file
-                updatedEvent = EventOperator.EditEvent(existingDay, updatedEvent);
-
-                _dbContext.SaveChanges();
+                _eventServices.EditEvent(existingDay, updatedEvent);
 
                 return RedirectToAction("Index");
             }
             return View(updatedEvent);
         }
-
 
         public ActionResult Delete(int id, DateOnly dayDate)
         {
