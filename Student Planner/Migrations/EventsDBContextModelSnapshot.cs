@@ -22,7 +22,7 @@ namespace Student_Planner.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Student_Planner.Models.Day", b =>
+            modelBuilder.Entity("Student_Planner.Models.Days", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -38,7 +38,7 @@ namespace Student_Planner.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Day");
+                    b.ToTable("Days");
                 });
 
             modelBuilder.Entity("Student_Planner.Models.Event", b =>
@@ -76,16 +76,16 @@ namespace Student_Planner.Migrations
 
             modelBuilder.Entity("Student_Planner.Models.Event", b =>
                 {
-                    b.HasOne("Student_Planner.Models.Day", "Day")
+                    b.HasOne("Student_Planner.Models.Days", "Days")
                         .WithMany("events")
                         .HasForeignKey("DayId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Day");
+                    b.Navigation("Days");
                 });
 
-            modelBuilder.Entity("Student_Planner.Models.Day", b =>
+            modelBuilder.Entity("Student_Planner.Models.Days", b =>
                 {
                     b.Navigation("events");
                 });

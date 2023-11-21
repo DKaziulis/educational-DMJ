@@ -19,7 +19,7 @@ namespace Student_Planner.Services
             dayDictionary.Clear();
 
             string?[] files = Directory.GetFiles(filePath).Select(Path.GetFileName).ToArray();
-            JsonHandler<Event> jsonHandler = new JsonHandler<Event>();
+            //JsonHandler<Event> jsonHandler = new JsonHandler<Event>();
 
             foreach (string? file in files)
             {
@@ -33,7 +33,7 @@ namespace Student_Planner.Services
                         Day loadDay = new()
                         {
                             Date = date,
-                            events = jsonHandler.DeserializeFromJSON(filePath)
+                            //events = jsonHandler.DeserializeFromJSON(filePath)
                         };
                         return loadDay;
                     });

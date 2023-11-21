@@ -4,7 +4,7 @@ namespace Student_Planner.Models
 {
     public class Day : IComparable<Day>
     {
-        public int Id { get; set; } //Primary key for the Day entity
+        public int Id { get; set; } //Primary key for the Days entity
         public DateOnly Date{ get; set; }
         public int NumOfEvents { get; set; }
         public List<Event>? events;
