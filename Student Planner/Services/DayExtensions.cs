@@ -13,18 +13,16 @@ namespace Student_Planner.Services
 
     public static class DayExtensions
     {
-        // Modify SortDays to accept a delegate for custom sorting
-        public static List<Day> SortDays(
-            this List<Day> days,
-            DaySortDelegate daySortDelegate,
-            EventSortKey eventSortKey = EventSortKey.Name)
+        public static List<Day> SortDays(this List<Day> days, DaySortKey daySortKey = DaySortKey.Date, EventSortKey eventSortKey = EventSortKey.Name)
         {
-            if (daySortDelegate == null)
+            PropertyInfo? property = typeof(Day).GetProperty(daySortKey.ToString());
+            if (property == null)
             {
-                throw new ArgumentNullException(nameof(daySortDelegate));
+                throw new ArgumentException("Invalid or non-existent sorting key.");
             }
 
-            return daySortDelegate(days)
+            return days
+                .OrderBy(d => property.GetValue(d))
                 .Select(day => new Day
                 {
                     Date = day.Date,
