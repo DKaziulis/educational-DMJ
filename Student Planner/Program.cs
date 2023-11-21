@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Student_Planner.Databases;
+using Student_Planner.Repositories.Interfaces;
+using Student_Planner.Repositories.Implementations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +12,9 @@ builder.Services.AddDbContext<EventsDBContext>(
     options => options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection"), 
         x => x.UseDateOnlyTimeOnly()));
+
+builder.Services.AddScoped<IDayRepository, DayRepository>();
+builder.Services.AddScoped<IEventRepository, EventRepository>();
 
 var app = builder.Build();
 

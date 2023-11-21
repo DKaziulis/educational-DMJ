@@ -9,22 +9,28 @@ using Student_Planner.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Student_Planner.Databases;
+using Student_Planner.Repositories;
+using Student_Planner.Repositories.Interfaces;
 
 namespace Student_Planner.Controllers
 {
     public class EventsController : Controller
     {
         private readonly EventsDBContext _dbContext;
-        public EventsController(EventsDBContext context)
+        private readonly IDayRepository _dayRepository;
+        private readonly IEventRepository _eventRepository;
+        public EventsController(EventsDBContext context, IDayRepository dayRepository, IEventRepository eventRepository)
         {
             _dbContext = context;
+            _dayRepository = dayRepository;
+            _eventRepository = eventRepository;
         }
         private static List<Event> events = new List<Event>();
         private static List<Day>? days = new List<Day>();
 
         public ActionResult Index()
         {
-            days = _dbContext.Day.ToList();
+            days = (List<Day>?)_dayRepository.GetAll();
             events = _dbContext.Events.ToList();
 
             // Filter the days that have upcoming events and order them by start time.
@@ -66,7 +72,7 @@ namespace Student_Planner.Controllers
                         Date = tempShortDate,
                         events = new List<Event> { newEvent }
                     };
-                    _dbContext.Day.Add(updatedDay);
+                    _dbContext.Days.Add(updatedDay);
                 }
 
                 newEvent.DayId = updatedDay.Id;
@@ -120,7 +126,7 @@ namespace Student_Planner.Controllers
         [HttpPost]
         public ActionResult Edit(Event? updatedEvent, DateOnly dayDate)
         {
-            var existingDay = _dbContext.Day
+            var existingDay = _dbContext.Days
                    .Include(d => d.events)
                    .FirstOrDefault(d => d.Date == dayDate);
             if (ModelState.IsValid)

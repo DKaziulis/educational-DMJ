@@ -7,7 +7,7 @@ namespace Student_Planner.Databases
     public class EventsDBContext : DbContext
     {
         public DbSet<Event> Events { get; set; }
-        public DbSet<Day> Day { get; set; }
+        public DbSet<Day> Days { get; set; }
         public EventsDBContext(DbContextOptions<EventsDBContext> options) : base(options)
         {
 

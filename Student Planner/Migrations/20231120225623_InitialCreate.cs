@@ -12,7 +12,7 @@ namespace Student_Planner.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Day",
+                name: "Days",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
@@ -42,7 +42,7 @@ namespace Student_Planner.Migrations
                     table.ForeignKey(
                         name: "FK_Events_Day_DayId",
                         column: x => x.DayId,
-                        principalTable: "Day",
+                        principalTable: "Days",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -60,7 +60,7 @@ namespace Student_Planner.Migrations
                 name: "Events");
 
             migrationBuilder.DropTable(
-                name: "Day");
+                name: "Days");
         }
     }
 }
