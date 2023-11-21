@@ -2,10 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Student_Planner.Models;
 using Student_Planner.Services;
-using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using System.Globalization;
-using System.Text.Json.Serialization;
 using System.Composition;
 using Student_Planner.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +14,6 @@ namespace Student_Planner.Controllers
 {
     public class EventsController : Controller
     {
-
         private readonly EventsDBContext _dbContext;
         public EventsController(EventsDBContext context)
         {
@@ -24,10 +21,6 @@ namespace Student_Planner.Controllers
         }
         private static List<Event> events = new List<Event>();
         private static List<Day>? days = new List<Day>();
-        private static readonly string eventDataFilePath = Path.GetFullPath(Path.Combine(
-            Directory.GetCurrentDirectory(), "EventData"));
-        private static string completePath = eventDataFilePath;
-        private JsonHandler<Event> jsonHandler = new JsonHandler<Event>(dataFilePath: eventDataFilePath, list: events);
 
         public ActionResult Index()
         {
