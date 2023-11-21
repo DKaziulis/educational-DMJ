@@ -55,7 +55,7 @@ namespace Student_Planner.Models
                 }
             }
         }
-        private TimeSpan CalculateEventDuration()
+        public TimeSpan CalculateEventDuration()
         {
             // Calculate event duration based on BeginDate and EventEndTime
             return EndTime - StartTime;

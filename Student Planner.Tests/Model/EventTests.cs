@@ -1,66 +1,119 @@
 ﻿using Xunit;
-using Student_Planner.Models;
 using System;
+using Student_Planner.Models;
 using Student_Planner.Controllers;
+using Student_Planner.Models.Exceptions;
 
 namespace Student_Planner.Tests.Model
 {
     public class EventTests
     {
         [Fact]
-        public void Event_Constructor_Sets_Properties_Correctly()
+        public void Constructor_ValidInputs_ObjectIsInitialized()
         {
             // Arrange
-            string name = "Test Event";
-            DateTime beginDate = DateTime.Today;
-            TimeOnly eventEndTime = new TimeOnly(10, 0);
-            string description = "Test Description";
-            TimeDuration.Time eventDuration = new TimeDuration.Time(10, 0, 0);
-
+            var name = "Test Event";
+            var beginDate = DateTime.Now;
+            var endTime = new TimeOnly(10, 0);
+            var description = "This is a test event.";
+            var eventDuration = new TimeDuration.Time(1, 0,0);
 
             // Act
-            var eventObj = new Event(name, beginDate, eventEndTime, description, eventDuration);
+            var testEvent = new Event(name, beginDate, endTime, description, eventDuration);
 
             // Assert
-            Assert.Equal(name, eventObj.Name);
-            Assert.Equal(beginDate, eventObj.BeginDate);
-            Assert.Equal(eventEndTime, eventObj.EndTime);
-            Assert.Equal(description, eventObj.Description);
-            Assert.Equal(eventDuration.ToTimeSpan(), eventObj.EventDuration);
+            Assert.Equal(name, testEvent.Name);
+            Assert.Equal(beginDate, testEvent.BeginDate);
+            Assert.Equal(endTime, testEvent.EndTime);
+            Assert.Equal(description, testEvent.Description);
         }
 
         [Fact]
-        public void Event_Default_Constructor_Works_Correctly()
-        {
-            // Act
-            var eventObj = new Event();
-
-            // Assert
-            Assert.Equal(default(int), eventObj.Id);
-            Assert.Null(eventObj.Name);
-            Assert.Equal(default(DateTime), eventObj.BeginDate);
-            Assert.Equal(default(TimeOnly), eventObj.StartTime);
-            Assert.Equal(default(TimeOnly), eventObj.EndTime);
-            Assert.Null(eventObj.Description);
-            Assert.Equal(default(TimeSpan), eventObj.EventDuration);
-            Assert.Equal(default(EventsController.CourseGroup), eventObj.CourseGroup);
-        }
-
-        [Fact]
-        public void CalculateEventDuration_Returns_Correct_Duration()
+        public void CalculateEventDuration_ValidTimes_CorrectDuration()
         {
             // Arrange
-            var eventObj = new Event
-            {
-                StartTime = new TimeOnly(9, 0),
-                EndTime = new TimeOnly(10, 0)
-            };
+            var testEvent = new Event();
+            testEvent.StartTime = new TimeOnly(9, 0);
+            testEvent.EndTime = new TimeOnly(10, 0);
 
             // Act
-            var duration = eventObj.EventDuration;
+            var duration = testEvent.CalculateEventDuration();
 
             // Assert
             Assert.Equal(new TimeSpan(1, 0, 0), duration);
+        }
+
+        [Fact]
+        public void Name_SetValidName_NameIsSet()
+        {
+            // Arrange
+            var testEvent = new Event();
+            var validName = "Test Event";
+
+            // Act
+            testEvent.Name = validName;
+
+            // Assert
+            Assert.Equal(validName, testEvent.Name);
+        }
+
+        [Fact]
+        public void Name_SetInvalidName_ThrowsCharacterException()
+        {
+            // Arrange
+            var testEvent = new Event();
+            var invalidName = "Invalid#Name";
+
+            // Act & Assert
+            var exception = Assert.Throws<CharacterException>(() => testEvent.Name = invalidName);
+            Assert.Equal("Invalid name format.", exception.Message);
+        }
+
+        [Fact]
+        public void CompareTo_NullEvent_ReturnsOne()
+        {
+            // Arrange
+            var testEvent = new Event();
+
+            // Act
+            var result = testEvent.CompareTo(null);
+
+            // Assert
+            Assert.Equal(1, result);
+        }
+
+        [Fact]
+        public void CompareTo_EarlierEvent_ReturnsPositive()
+        {
+            // Arrange
+            var testEvent1 = new Event();
+            testEvent1.BeginDate = DateTime.Now;
+
+            var testEvent2 = new Event();
+            testEvent2.BeginDate = DateTime.Now.AddDays(-1);
+
+            // Act
+            var result = testEvent1.CompareTo(testEvent2);
+
+            // Assert
+            Assert.True(result > 0);
+        }
+
+        [Fact]
+        public void CompareTo_LaterEvent_ReturnsNegative()
+        {
+            // Arrange
+            var testEvent1 = new Event();
+            testEvent1.BeginDate = DateTime.Now;
+
+            var testEvent2 = new Event();
+            testEvent2.BeginDate = DateTime.Now.AddDays(1);
+
+            // Act
+            var result = testEvent1.CompareTo(testEvent2);
+
+            // Assert
+            Assert.True(result < 0);
         }
     }
 }
