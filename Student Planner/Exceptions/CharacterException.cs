@@ -1,4 +1,4 @@
-﻿namespace Student_Planner.Models.Exceptions
+﻿namespace Student_Planner.Exceptions
 {
     public class CharacterException : ArgumentException
     {

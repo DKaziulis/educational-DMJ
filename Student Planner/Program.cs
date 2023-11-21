@@ -17,6 +17,7 @@ builder.Services.AddDbContext<EventsDBContext>(
 builder.Services.AddScoped<IDayRepository, DayRepository>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<EventServices>();
+builder.Services.AddScoped<DayOperator>();
 
 var app = builder.Build();
 

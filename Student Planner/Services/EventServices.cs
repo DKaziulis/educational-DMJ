@@ -1,6 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Student_Planner.Models;
+using Student_Planner.Exceptions;
+using Microsoft.Extensions.Logging;
 using Student_Planner.Repositories.Interfaces;
+using System.Text.RegularExpressions;
 
 namespace Student_Planner.Services
 {
@@ -8,30 +11,45 @@ namespace Student_Planner.Services
     {
         private readonly IDayRepository _dayRepository;
         private readonly IEventRepository _eventRepository;
+        private readonly ILogger<EventServices> _logger;
+        private readonly DayOperator _dayOperator;
 
-        public EventServices(IDayRepository dayRepository, IEventRepository eventRepository)
+        public EventServices(IDayRepository dayRepository, IEventRepository eventRepository, ILogger<EventServices> logger,
+            DayOperator dayOperator)
         {
             _dayRepository = dayRepository;
             _eventRepository = eventRepository;
+            _logger = logger;
+            _dayOperator = dayOperator;
         }
 
         public void CreateEvent (Event newEvent)
         {
+            if(!string.IsNullOrEmpty(newEvent.Name))
+            {
+                try
+                {
+                    newEvent.Name = newEvent.Name;
+                }
+                catch (CharacterException ex)
+                {
+                    _logger.LogError(ex, "Error setting the Name property");
+                }
+
+                if (!Regex.IsMatch(newEvent.Name, @"^[A-Za-z0-9\s-]+$"))
+                {
+                    _logger.LogError("Invalid name format after setting the Name property");
+                }
+            }
             //Takes the short date (yyyy-MM-dd) of the passed event, and converts it to DateOnly
             newEvent.StartTime = TimeOnly.FromDateTime(newEvent.BeginDate);
             DateOnly tempShortDate = DateOnly.FromDateTime(newEvent.BeginDate);
 
             //Checks which day to create the event for
-            Day? updatedDay = DayOperator.FindDayForEvent(tempShortDate);
-
-            //If such a date exists
-            if (updatedDay != null && updatedDay.events != null)
-            {
-                updatedDay.events.Add(newEvent);
-            }
+            Day? updatedDay = _dayOperator.FindDayForEvent(tempShortDate);
 
             //If there is no such date, creates a new one
-            else
+            if (updatedDay == null)
             {
                 updatedDay = new Day
                 {
@@ -42,12 +60,13 @@ namespace Student_Planner.Services
                 _dayRepository.Add(updatedDay);
             }
 
+            updatedDay.NumOfEvents++;
             newEvent.DayId = updatedDay.Id;
 
             //Creates a unique ID, which consists of the event Date info, and the serial number of the day's events
-            if (updatedDay.events != null)
+            if (updatedDay != null)
             {
-                string customId = updatedDay.Id.ToString() + updatedDay.events.Count.ToString();
+                string customId = updatedDay.Id.ToString() + updatedDay.NumOfEvents.ToString();
                 newEvent.Id = Convert.ToInt32(customId);
 
                 _eventRepository.Add(newEvent);
