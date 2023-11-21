@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
-using Student_Planner.Models.Exceptions;
+using Student_Planner.Exceptions;
 using System.ComponentModel.DataAnnotations.Schema;
 using Student_Planner.Services;
 
@@ -32,7 +32,6 @@ namespace Student_Planner.Models
             BeginDate = beginDate;
             EndTime = eventEndTime;
             Description = description;
-            //EventDuration = eventDuration.ToTimeSpan();
         }
         [MaxLength(60)]
         private string? name;

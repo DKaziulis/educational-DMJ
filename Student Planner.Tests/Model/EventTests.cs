@@ -2,7 +2,7 @@
 using System;
 using Student_Planner.Models;
 using Student_Planner.Controllers;
-using Student_Planner.Models.Exceptions;
+using Student_Planner.Exceptions;
 
 namespace Student_Planner.Tests.Model
 {

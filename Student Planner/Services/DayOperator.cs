@@ -1,4 +1,5 @@
 ﻿using Student_Planner.Models;
+using Student_Planner.Repositories.Interfaces;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -9,42 +10,33 @@ namespace Student_Planner.Services
 {
     public class DayOperator
     {
-        // Use ConcurrentDictionary for thread safety
-        private static ConcurrentDictionary<DateOnly, Day> dayDictionary = new ConcurrentDictionary<DateOnly, Day>();
+        private readonly IDayRepository _dayRepository;
+        private ConcurrentDictionary<DateOnly, Day> dayDictionary;
 
-        // Loads the list of all existing dates from json files in the specified File Path
-        public static ConcurrentDictionary<DateOnly, Day> LoadDays(string filePath)
+        public DayOperator(IDayRepository dayRepository)
         {
-            // Clear the existing dictionary to reload the days
-            dayDictionary.Clear();
-
-            string?[] files = Directory.GetFiles(filePath).Select(Path.GetFileName).ToArray();
-            //JsonHandler<Event> jsonHandler = new JsonHandler<Event>();
-
-            foreach (string? file in files)
-            {
-                if (file != null)
-                {
-                    DateOnly date = DateOnly.Parse(file.Remove(10, 5));
-
-                    // Use GetOrAdd to safely add to the ConcurrentDictionary
-                    dayDictionary.GetOrAdd(date, _ =>
-                    {
-                        Day loadDay = new()
-                        {
-                            Date = date,
-                            //events = jsonHandler.DeserializeFromJSON(filePath)
-                        };
-                        return loadDay;
-                    });
-                }
-            }
-            return dayDictionary;
+            _dayRepository = dayRepository;
+            dayDictionary = LoadDays();
         }
 
-        public static Day? FindDayForEvent(DateOnly shortDate)
+        // Loads the list of all existing dates from the repository
+        private ConcurrentDictionary<DateOnly, Day> LoadDays()
         {
-            // Use TryGetValue for thread-safe access
+            var days = _dayRepository.GetAll();
+            var dictionary = new ConcurrentDictionary<DateOnly, Day>();
+
+            foreach (var day in days)
+            {
+                DateOnly date = day.Date;
+
+                dictionary.GetOrAdd(date, _ => day);
+            }
+            return dictionary;
+        }
+
+        // Find a Day by passed date
+        public Day? FindDayForEvent(DateOnly shortDate)
+        {
             if (dayDictionary.TryGetValue(shortDate, out Day foundDay))
             {
                 return foundDay;

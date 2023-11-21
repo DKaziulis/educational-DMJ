@@ -33,7 +33,7 @@ namespace Student_Planner.Repositories.Implementations
         public void SaveChanges(){
             _dbContext.SaveChanges();
         }
-        public Day GetByDate(DateOnly date)
+        public Day? GetByDate(DateOnly date)
         {
             return _dbContext.Days.FirstOrDefault(d => d.Date == date);
         }
