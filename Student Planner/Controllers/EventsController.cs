@@ -11,23 +11,38 @@ namespace Student_Planner.Controllers
         private readonly IDayRepository _dayRepository;
         private readonly IEventRepository _eventRepository;
         private readonly EventServices _eventServices;
-        public EventsController(IDayRepository dayRepository, IEventRepository eventRepository, EventServices eventServices)
+        private readonly ILogger _logger;
+        public EventsController(IDayRepository dayRepository, IEventRepository eventRepository, EventServices eventServices, 
+            ILogger<EventsController> logger)
         {
             _dayRepository = dayRepository;
             _eventRepository = eventRepository;
             _eventServices = eventServices;
+            _logger = logger;
+
+            _logger.LogInformation("EventsController created.");
         }
+
 
         public ActionResult Index()
         {
-            var days = (List<Day>?)_dayRepository.GetAll();
-            _ = _eventRepository.GetAll();
+            try
+            {
+                var days = (List<Day>?)_dayRepository.GetAll();
+                _ = _eventRepository.GetAll();
 
-            // Filter the days that have upcoming events and order them by start time.
-            days?.SortDays(DaySortKey.Date, eventSortKey: EventSortKey.StartTime);
-            
-            return View(days);
+                // Filter the days that have upcoming events and order them by start time.
+                days?.SortDays(DaySortKey.Date, eventSortKey: EventSortKey.StartTime);
+
+                return View(days);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred in the Index action.");
+                throw;
+            }
         }
+
 
         public ActionResult Create()
         {
@@ -42,31 +57,40 @@ namespace Student_Planner.Controllers
                 if (ModelState.IsValid)
                 {
                     _eventServices.CreateEvent(newEvent);
+                    _logger.LogInformation("Event created successfully.");
 
                     return RedirectToAction("Index");
                 }
             }
             catch (ArgumentException ex)
             {
+                _logger.LogError(ex, "An error occurred in the Create action.");
                 ModelState.AddModelError("Name", ex.Message);
             }
+
             return View(newEvent);
         }
 
         public ActionResult Edit(int id, DateOnly dayDate)
         {
-            var existingDay = _dayRepository.GetByDate(dayDate);
-
-            if (existingDay != null)
+            try
             {
-                var existingEvent = _eventRepository.GetById(id);
+                var existingDay = _dayRepository.GetByDate(dayDate);
 
-                return View(existingEvent);
-            } 
-            else 
+                if (existingDay != null)
+                {
+                    var existingEvent = _eventRepository.GetById(id);
+                    _logger.LogInformation("Edit action completed successfully.");
+
+                    return View(existingEvent);
+                }
+            }
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred in the Edit action.");
                 throw new ArgumentException("Day not found/Events is null");
             }
+            return NotFound();
         }
 
         [HttpPost]
@@ -85,18 +109,27 @@ namespace Student_Planner.Controllers
 
         public ActionResult Delete(int id, DateOnly dayDate)
         {
-            var existingDay = _dayRepository.GetByDate(dayDate);
-
-            if(existingDay != null)
+            try
             {
-                var existingEvent = _eventRepository.GetById(id);
+                var existingDay = _dayRepository.GetByDate(dayDate);
 
-                return View(existingEvent);
+                if (existingDay != null)
+                {
+                    var existingEvent = _eventRepository.GetById(id);
+
+                    return View(existingEvent);
+                }
+                else
+                {
+                    _logger.LogWarning("Day not found/Events is null in Delete action.");
+                    throw new ArgumentException("Day not found/Events is null");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                throw new ArgumentException("Day not found/Events is null");
+                _logger.LogError(ex, "An error occurred in the Delete action.");
             }
+            return NotFound(id);
         }
 
         [HttpPost, ActionName("DeleteConfirmed")]

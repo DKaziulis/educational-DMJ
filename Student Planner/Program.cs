@@ -3,6 +3,7 @@ using Student_Planner.Databases;
 using Student_Planner.Repositories.Interfaces;
 using Student_Planner.Repositories.Implementations;
 using Student_Planner.Services;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,11 @@ builder.Services.AddScoped<IDayRepository, DayRepository>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<EventServices>();
 builder.Services.AddScoped<DayOperator>();
+
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.File("Logs/app.log", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
 
 var app = builder.Build();
 
@@ -40,9 +46,6 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-app.MapControllerRoute(
-    name: "calendar",
-    pattern: "{controller=Calendar}/{action=Calendar}/{id?}");
 app.MapControllerRoute(
     name: "event",
     pattern: "{controller=Event}/{action=DayEvent}/{id?}");
