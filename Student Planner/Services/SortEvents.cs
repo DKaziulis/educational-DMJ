@@ -10,7 +10,7 @@ namespace Student_Planner.Services
     public static class EventExtensions
     {
         public static List<T> SortEvents<T>(this List<T> events, EventSortKey sortKey = EventSortKey.Name)
-        where T : class, IComparable<T>, new()
+        where T : class, IComparable<T>
         {
             PropertyInfo? property = typeof(T).GetProperty(sortKey.ToString());
             if (property == null)

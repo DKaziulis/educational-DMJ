@@ -6,7 +6,7 @@
         {
         }
 
-        public CharacterException(string message, string paramName) : base(message, paramName)
+        public CharacterException(string message, string invalidCharacter) : base(message, invalidCharacter)
         {
         }
 
@@ -14,7 +14,7 @@
         {
         }
 
-        public CharacterException(string message, string paramName, Exception innerException) : base(message, paramName, innerException)
+        public CharacterException(string message, string invalidCharacter, Exception innerException) : base(message, invalidCharacter, innerException)
         {
         }
     }
