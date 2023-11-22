@@ -36,5 +36,9 @@ namespace Student_Planner.Repositories.Implementations
         {
             _dbContext.SaveChanges();
         }
+        public Event? GetByDayId(int dayId)
+        {
+            return _dbContext.Events.FirstOrDefault(e => e.DayId == dayId);
+        }
     }
 }

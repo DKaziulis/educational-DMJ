@@ -101,9 +101,10 @@ namespace Student_Planner.Services
         {
             int tempId = existingEvent.DayId;
             _eventRepository.Delete(existingEvent);
-
+            existingDay.NumOfEvents--;
+            Console.WriteLine(_eventRepository.GetByDayId(tempId));
             //checks if another Event with the current Day's Id exists, if not, deletes the Day
-            if (_eventRepository.GetById(tempId) == null)
+            if (existingDay.NumOfEvents == 0)
             {
                 _dayRepository.Delete(existingDay);
             }

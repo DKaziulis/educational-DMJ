@@ -4,5 +4,6 @@ namespace Student_Planner.Repositories.Interfaces
 {
     public interface IEventRepository : IRepository <Event>
     {
+        Event? GetByDayId(int dayId);
     }
 }

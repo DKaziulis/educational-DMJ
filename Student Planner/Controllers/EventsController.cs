@@ -1,17 +1,8 @@
-﻿using System.Net;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Student_Planner.Models;
 using Student_Planner.Services;
-using Microsoft.AspNetCore.Mvc.Formatters;
-using System.Globalization;
-using System.Composition;
 using Student_Planner.Enums;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Student_Planner.Databases;
-using Student_Planner.Repositories;
 using Student_Planner.Repositories.Interfaces;
-using Microsoft.VisualBasic;
 
 namespace Student_Planner.Controllers
 {
