@@ -35,6 +35,7 @@ namespace Student_Planner.Models
         }
         [MaxLength(60)]
         private string? name;
+        [MaxLength(60)]
         public string? Name
         {
             get { return name; }
