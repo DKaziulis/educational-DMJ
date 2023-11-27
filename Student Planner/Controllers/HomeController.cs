@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Student_Planner.Models;
 using Student_Planner.Services.Implementations;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace Student_Planner.Controllers
 {
@@ -14,10 +16,12 @@ namespace Student_Planner.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             string filePath = "ReadFiles/ApplicationDescription.txt";
-            string fileContent = ReadTxtFile.ReadTextFile(filePath);
+
+            // Use Task.Run to execute the synchronous method asynchronously
+            string fileContent = await Task.Run(() => ReadTxtFile.ReadTextFile(filePath));
 
             ViewData["Message"] = fileContent;
 
@@ -34,6 +38,5 @@ namespace Student_Planner.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
     }
 }
