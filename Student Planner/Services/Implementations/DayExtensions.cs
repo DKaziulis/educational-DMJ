@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Student_Planner.Services
+namespace Student_Planner.Services.Implementations
 {
     // Define a delegate for sorting
     public delegate IOrderedEnumerable<Day> DaySortDelegate(List<Day> days);

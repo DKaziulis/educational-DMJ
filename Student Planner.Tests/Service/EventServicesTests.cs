@@ -1,7 +1,8 @@
-﻿using Moq;
+﻿using Microsoft.Extensions.Logging;
+using Moq;
 using Student_Planner.Models;
 using Student_Planner.Repositories.Interfaces;
-using Student_Planner.Services;
+using Student_Planner.Services.Implementations;
 using System;
 
 namespace Student_Planner.Tests.Service
@@ -14,7 +15,9 @@ namespace Student_Planner.Tests.Service
             // Arrange
             var mockDayRepo = new Mock<IDayRepository>();
             var mockEventRepo = new Mock<IEventRepository>();
-            var service = new EventServices(mockDayRepo.Object, mockEventRepo.Object);
+            var mockLogger = new Mock<ILogger<EventServices>>();
+            var mockOperator = new Mock<DayOperator>();
+            var service = new EventServices(mockDayRepo.Object, mockEventRepo.Object, mockLogger.Object, mockOperator.Object);
             var newEvent = new Event();
 
             // Act
@@ -31,7 +34,9 @@ namespace Student_Planner.Tests.Service
             // Arrange
             var mockDayRepo = new Mock<IDayRepository>();
             var mockEventRepo = new Mock<IEventRepository>();
-            var service = new EventServices(mockDayRepo.Object, mockEventRepo.Object);
+            var mockLogger = new Mock<ILogger<EventServices>>();
+            var mockOperator = new Mock<DayOperator>();
+            var service = new EventServices(mockDayRepo.Object, mockEventRepo.Object, mockLogger.Object, mockOperator.Object);
             var existingDay = new Day();
             var updatedEvent = new Event();
 
@@ -48,7 +53,9 @@ namespace Student_Planner.Tests.Service
             // Arrange
             var mockDayRepo = new Mock<IDayRepository>();
             var mockEventRepo = new Mock<IEventRepository>();
-            var service = new EventServices(mockDayRepo.Object, mockEventRepo.Object);
+            var mockLogger = new Mock<ILogger<EventServices>>();
+            var mockOperator = new Mock<DayOperator>();
+            var service = new EventServices(mockDayRepo.Object, mockEventRepo.Object, mockLogger.Object, mockOperator.Object);
             var existingDay = new Day();
             var existingEvent = new Event();
 

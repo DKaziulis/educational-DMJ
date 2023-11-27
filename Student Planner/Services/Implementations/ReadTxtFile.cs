@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text;
 
-namespace Student_Planner.Services
+namespace Student_Planner.Services.Implementations
 {
     public class ReadTxtFile
     {

@@ -4,18 +4,19 @@ using Student_Planner.Exceptions;
 using Microsoft.Extensions.Logging;
 using Student_Planner.Repositories.Interfaces;
 using System.Text.RegularExpressions;
+using Student_Planner.Services.Interfaces;
 
-namespace Student_Planner.Services
+namespace Student_Planner.Services.Implementations
 {
-    public class EventServices
+    public class EventServices : IEventServices
     {
         private readonly IDayRepository _dayRepository;
         private readonly IEventRepository _eventRepository;
         private readonly ILogger<EventServices> _logger;
-        private readonly DayOperator _dayOperator;
+        private readonly IDayOperator _dayOperator;
 
         public EventServices(IDayRepository dayRepository, IEventRepository eventRepository, ILogger<EventServices> logger,
-            DayOperator dayOperator)
+            IDayOperator dayOperator)
         {
             _dayRepository = dayRepository;
             _eventRepository = eventRepository;
@@ -23,9 +24,9 @@ namespace Student_Planner.Services
             _dayOperator = dayOperator;
         }
 
-        public void CreateEvent (Event newEvent)
+        public void CreateEvent(Event newEvent)
         {
-            if(!string.IsNullOrEmpty(newEvent.Name))
+            if (!string.IsNullOrEmpty(newEvent.Name))
             {
                 try
                 {
@@ -78,7 +79,7 @@ namespace Student_Planner.Services
             }
         }
 
-        public void EditEvent (Day existingDay, Event updatedEvent)
+        public void EditEvent(Day existingDay, Event updatedEvent)
         {
             if (existingDay != null)
             {
