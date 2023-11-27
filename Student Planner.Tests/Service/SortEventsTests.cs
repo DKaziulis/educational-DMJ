@@ -1,6 +1,6 @@
 ﻿using Student_Planner.Enums;
 using Student_Planner.Models;
-using Student_Planner.Services;
+using Student_Planner.Services.Implementations;
 
 namespace Student_Planner.Tests.Service
 {

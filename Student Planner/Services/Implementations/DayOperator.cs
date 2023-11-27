@@ -1,14 +1,15 @@
 ﻿using Student_Planner.Models;
 using Student_Planner.Repositories.Interfaces;
+using Student_Planner.Services.Interfaces;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Student_Planner.Services
+namespace Student_Planner.Services.Implementations
 {
-    public class DayOperator
+    public class DayOperator : IDayOperator
     {
         private readonly IDayRepository _dayRepository;
         private ConcurrentDictionary<DateOnly, Day> dayDictionary;

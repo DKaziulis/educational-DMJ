@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Student_Planner.Models;
-using Student_Planner.Services;
+using Student_Planner.Services.Implementations;
 using System.Diagnostics;
 
 namespace Student_Planner.Controllers

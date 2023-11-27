@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Student_Planner.Services
+namespace Student_Planner.Services.Implementations
 {
     public static class EventExtensions
     {

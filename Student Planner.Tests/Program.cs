@@ -3,7 +3,6 @@ using Student_Planner.Databases;
 using Student_Planner.Repositories.Interfaces;
 using Student_Planner.Repositories.Implementations;
 using Serilog;
-using Student_Planner.Services.Interfaces;
 using Student_Planner.Services.Implementations;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,8 +17,8 @@ builder.Services.AddDbContext<EventsDBContext>(
 
 builder.Services.AddScoped<IDayRepository, DayRepository>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
-builder.Services.AddScoped<IEventServices, EventServices>();
-builder.Services.AddScoped<IDayOperator, DayOperator>();
+builder.Services.AddScoped<EventServices>();
+builder.Services.AddScoped<DayOperator>();  //AddSingleton
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()

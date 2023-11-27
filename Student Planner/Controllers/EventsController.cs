@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Student_Planner.Models;
-using Student_Planner.Services;
 using Student_Planner.Enums;
 using Student_Planner.Repositories.Interfaces;
+using Student_Planner.Services.Implementations;
+using Student_Planner.Services.Interfaces;
 
 namespace Student_Planner.Controllers
 {
@@ -10,9 +11,9 @@ namespace Student_Planner.Controllers
     {
         private readonly IDayRepository _dayRepository;
         private readonly IEventRepository _eventRepository;
-        private readonly EventServices _eventServices;
+        private readonly IEventServices _eventServices;
         private readonly ILogger _logger;
-        public EventsController(IDayRepository dayRepository, IEventRepository eventRepository, EventServices eventServices, 
+        public EventsController(IDayRepository dayRepository, IEventRepository eventRepository, IEventServices eventServices, 
             ILogger<EventsController> logger)
         {
             _dayRepository = dayRepository;
@@ -97,14 +98,22 @@ namespace Student_Planner.Controllers
         public ActionResult Edit(Event updatedEvent, DateOnly dayDate)
         {
             var existingDay = _dayRepository.GetByDate(dayDate);
-            
-            if (ModelState.IsValid)
-            {
-                _eventServices.EditEvent(existingDay, updatedEvent);
 
-                return RedirectToAction("Index");
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    _eventServices.EditEvent(existingDay, updatedEvent);
+
+                    return RedirectToAction("Index");
+                }
+                return View(updatedEvent);
             }
-            return View(updatedEvent);
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred in the Edit action.");
+            }
+            return NotFound(ModelState);
         }
 
         public ActionResult Delete(int id, DateOnly dayDate)
