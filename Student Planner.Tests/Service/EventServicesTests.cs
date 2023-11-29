@@ -4,67 +4,75 @@ using Student_Planner.Models;
 using Student_Planner.Repositories.Interfaces;
 using Student_Planner.Services.Implementations;
 using System;
+using Student_Planner.Services.Interfaces;
 
 namespace Student_Planner.Tests.Service
 {
     public class EventServicesTests
     {
-        [Fact]
-        public void CreateEvent_ValidEvent_EventIsCreated()
+        private readonly Mock<IDayRepository> _dayRepositoryMock;
+        private readonly Mock<IEventRepository> _eventRepositoryMock;
+        private readonly Mock<ILogger<EventServices>> _loggerMock;
+        private readonly Mock<IDayOperator> _dayOperatorMock;
+
+        public EventServicesTests()
         {
-            // Arrange
-            var mockDayRepo = new Mock<IDayRepository>();
-            var mockEventRepo = new Mock<IEventRepository>();
-            var mockLogger = new Mock<ILogger<EventServices>>();
-            var mockOperator = new Mock<DayOperator>();
-            var service = new EventServices(mockDayRepo.Object, mockEventRepo.Object, mockLogger.Object, mockOperator.Object);
-            var newEvent = new Event();
-
-            // Act
-            service.CreateEvent(newEvent);
-
-            // Assert
-            mockEventRepo.Verify(repo => repo.Add(newEvent), Times.Once);
-            mockDayRepo.Verify(repo => repo.SaveChanges(), Times.Once);
+            _dayRepositoryMock = new Mock<IDayRepository>();
+            _eventRepositoryMock = new Mock<IEventRepository>();
+            _loggerMock = new Mock<ILogger<EventServices>>();
+            _dayOperatorMock = new Mock<IDayOperator>();
         }
 
         [Fact]
-        public void EditEvent_ValidEvent_EventIsEdited()
+        public void CreateEvent_ValidEvent_AddsEventToRepository()
         {
             // Arrange
-            var mockDayRepo = new Mock<IDayRepository>();
-            var mockEventRepo = new Mock<IEventRepository>();
-            var mockLogger = new Mock<ILogger<EventServices>>();
-            var mockOperator = new Mock<DayOperator>();
-            var service = new EventServices(mockDayRepo.Object, mockEventRepo.Object, mockLogger.Object, mockOperator.Object);
+            var eventServices = new EventServices(_dayRepositoryMock.Object, _eventRepositoryMock.Object, _loggerMock.Object, _dayOperatorMock.Object);
+            var newEvent = new Event { Name = "Test Event", BeginDate = DateTime.Now };
+
+            // Act
+            eventServices.CreateEvent(newEvent);
+
+            // Assert
+            _eventRepositoryMock.Verify(r => r.Add(It.Is<Event>(e => e.Name == newEvent.Name)), Times.Once);
+            _dayRepositoryMock.Verify(r => r.SaveChanges(), Times.Once);
+        }
+
+        [Fact]
+        public void EditEvent_ExistingDayAndEvent_UpdatesEvent()
+        {
+            // Arrange
+            var eventServices = new EventServices(_dayRepositoryMock.Object, _eventRepositoryMock.Object, _loggerMock.Object, _dayOperatorMock.Object);
             var existingDay = new Day();
-            var updatedEvent = new Event();
+            var updatedEvent = new Event { Id = 1, Name = "Updated Event", BeginDate = DateTime.Now };
+
+            _eventRepositoryMock.Setup(r => r.GetById(updatedEvent.Id)).Returns(new Event());
 
             // Act
-            service.EditEvent(existingDay, updatedEvent);
+            eventServices.EditEvent(existingDay, updatedEvent);
 
             // Assert
-            mockEventRepo.Verify(repo => repo.SaveChanges(), Times.Once);
+            _eventRepositoryMock.Verify(r => r.SaveChanges(), Times.Once);
         }
 
         [Fact]
-        public void DeleteEvent_ValidEvent_EventIsDeleted()
+        public void DeleteEvent_ExistingEventAndDay_DeletesEventAndUpdatesDay()
         {
             // Arrange
-            var mockDayRepo = new Mock<IDayRepository>();
-            var mockEventRepo = new Mock<IEventRepository>();
-            var mockLogger = new Mock<ILogger<EventServices>>();
-            var mockOperator = new Mock<DayOperator>();
-            var service = new EventServices(mockDayRepo.Object, mockEventRepo.Object, mockLogger.Object, mockOperator.Object);
-            var existingDay = new Day();
-            var existingEvent = new Event();
+            var eventServices = new EventServices(_dayRepositoryMock.Object, _eventRepositoryMock.Object, _loggerMock.Object, _dayOperatorMock.Object);
+            var existingDay = new Day { NumOfEvents = 1 };
+            var existingEvent = new Event { DayId = existingDay.Id };
+
+            _eventRepositoryMock.Setup(r => r.GetByDayId(existingDay.Id)).Returns(new Event());
 
             // Act
-            service.DeleteEvent(existingEvent, existingDay);
+            eventServices.DeleteEvent(existingEvent, existingDay);
 
             // Assert
-            mockEventRepo.Verify(repo => repo.Delete(existingEvent), Times.Once);
-            mockDayRepo.Verify(repo => repo.SaveChanges(), Times.Once);
+            _eventRepositoryMock.Verify(r => r.Delete(It.Is<Event>(e => e.DayId == existingDay.Id)), Times.Once);
+            Assert.Equal(0, existingDay.NumOfEvents);
+            _dayRepositoryMock.Verify(r => r.SaveChanges(), Times.Once);
         }
+
     }
 }
