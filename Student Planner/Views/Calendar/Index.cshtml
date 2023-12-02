@@ -1,19 +1,44 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Calendar";
 }
-
-<script>
-
-    document.addEventListener('DOMContentLoaded', function () {
-        var calendarEl = document.getElementById('calendar');
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth'
-        });
-        calendar.render();
-    });
-
-</script>
+@model List<Event>
 
 <div id='calendar'></div>
+
+@section scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                timeZone: 'local'
+            });
+
+            // Create an array to store events
+            var events = [];
+
+            // Populate the events array with data from the server-side Model
+            @foreach (var item in Model)
+            {
+                <text>
+                var stringDate = '@item.DayId';
+                var formattedDate = stringDate.substr(0, 4) + '-' + stringDate.substr(4, 2) + '-' + stringDate.substr(6, 2);
+                var eventData = {
+                    title: '@item.Name',
+                    start: new Date(formattedDate)
+                };
+                console.log("Serialized Event:", stringDate);
+                events.push(eventData); 
+                </text>
+            }
+
+            // Add events to the calendar
+            calendar.addEventSource(events);
+
+            // Render the calendar
+            calendar.render();
+        });
+    </script>
+}
+
 
