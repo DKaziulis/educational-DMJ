@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Operations;
 using Student_Planner.Repositories.Interfaces;
+using Student_Planner.Models;
 
 namespace Student_Planner.Controllers
 {
@@ -15,6 +16,18 @@ namespace Student_Planner.Controllers
         {
             var events = _eventRepository.GetAll();
             return View(events);
+        }
+
+        public IActionResult EventsList(string date)
+        {
+            int dayId = Convert.ToInt32(date.Replace("-", ""));
+
+            var events = _eventRepository.GetAllByDayId(dayId).ToList();
+
+            ViewBag.Events = events;
+            ViewBag.Date = DateOnly.Parse(date);
+
+            return View();
         }
     }
 }
