@@ -9,14 +9,14 @@
 <h2> @ViewBag.Date </h2>
 
 <table class="table">
-    <tr>
-        <th>Name</th>
-        <th>StartTime</th>
-        <th>Description</th>
-        <th>Actions</th>
-    </tr>
     @if (ViewBag.Events != null)
     {
+        <tr>
+            <th>Name</th>
+            <th>StartTime</th>
+            <th>Description</th>
+            <th>Actions</th>
+        </tr>
         @foreach (var item in ViewBag.Events)
         {
             <tr>
@@ -24,16 +24,25 @@
                 <td>@item.StartTime.ToString("HH:mm")</td>
                 <td>@item.Description</td>
                 <td>
-                    <a href="javascript:void(0);" onclick="redirectToDelete(@item.Id, ViewBag.Date)">Delete</a>
-
+                    <a href="javascript:void(0);" onclick="redirectToEdit(@item.Id, '@ViewBag.Date')">Edit</a>
+                    <a href="javascript:void(0);" onclick="redirectToDelete(@item.Id, '@ViewBag.Date')">Delete</a>
                     <script>
-                        function redirectToDelete(id, dayDate) {
-                            console.log("URL:", url);
-                            window.location.href = '@Url.Action("Delete", "Events")' + '?id=' + id + '&dayDate=' + dayDate;
+                        function redirectToEdit(id, dayDate) {
+                            var url = '@Url.Action("Edit", "Events")' + '?id=' + id + '&dayDate=' + dayDate;
+                            window.location.href = url;
+                        }
+                        function redirectToDelete(id, dayDate){
+                            var url = '@Url.Action("Delete", "Events")' + '?id=' + id + '&dayDate=' + dayDate;
+                            window.location.href = url;
                         }
                     </script>
+
                 </td>
             </tr>
         }
     }
 </table>
+
+<div>
+    @Html.ActionLink("Back to Calendar", "Index")
+</div>

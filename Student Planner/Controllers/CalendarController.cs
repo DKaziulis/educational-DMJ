@@ -25,7 +25,7 @@ namespace Student_Planner.Controllers
             var events = _eventRepository.GetAllByDayId(dayId).ToList();
 
             ViewBag.Events = events;
-            ViewBag.Date = DateOnly.Parse(date);
+            ViewBag.Date = date;
 
             return View();
         }
