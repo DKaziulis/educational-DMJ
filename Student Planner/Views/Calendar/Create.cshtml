@@ -14,6 +14,8 @@
 {
     @Html.AntiForgeryToken()
 
+    <input type="hidden" name="dayDate" id="dayDate" value="@ViewBag.Date">
+
     <div class="form-group">
         @Html.LabelFor(model => model.Name, new { @class = "control-label" })
         @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
