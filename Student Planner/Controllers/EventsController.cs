@@ -4,6 +4,7 @@ using Student_Planner.Enums;
 using Student_Planner.Repositories.Interfaces;
 using Student_Planner.Services.Implementations;
 using Student_Planner.Services.Interfaces;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Student_Planner.Controllers
 {
@@ -72,11 +73,16 @@ namespace Student_Planner.Controllers
             return View(newEvent);
         }
 
-        public ActionResult Edit(int id, DateOnly dayDate)
+        public ActionResult Edit(int id, string dayDate)
         {
             try
             {
-                var existingDay = _dayRepository.GetByDate(dayDate);
+                var referringUrl = Request.Headers["Referer"].ToString();
+
+                ViewBag.ReferringUrl = referringUrl;
+
+                DateOnly dayDateOnly = DateOnly.Parse(dayDate);
+                var existingDay = _dayRepository.GetByDate(dayDateOnly);
 
                 if (existingDay != null)
                 {
@@ -95,7 +101,7 @@ namespace Student_Planner.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(Event updatedEvent, DateOnly dayDate)
+        public ActionResult Edit(Event updatedEvent, DateOnly dayDate, string returnUrl)
         {
             var existingDay = _dayRepository.GetByDate(dayDate);
 
@@ -105,7 +111,7 @@ namespace Student_Planner.Controllers
                 {
                     _eventServices.EditEvent(existingDay, updatedEvent);
 
-                    return RedirectToAction("Index");
+                    return Redirect(string.IsNullOrEmpty(returnUrl) ? Url.Action("Index", "Events") : returnUrl);
                 }
                 return View(updatedEvent);
             }
@@ -116,11 +122,16 @@ namespace Student_Planner.Controllers
             return NotFound(ModelState);
         }
 
-        public ActionResult Delete(int id, DateOnly dayDate)
+        public ActionResult Delete(int id, string dayDate)
         {
             try
             {
-                var existingDay = _dayRepository.GetByDate(dayDate);
+                var referringUrl = Request.Headers["Referer"].ToString();
+
+                ViewBag.ReferringUrl = referringUrl;
+
+                DateOnly dayDateOnly = DateOnly.Parse(dayDate);
+                var existingDay = _dayRepository.GetByDate(dayDateOnly);
 
                 if (existingDay != null)
                 {
@@ -143,20 +154,28 @@ namespace Student_Planner.Controllers
 
         [HttpPost, ActionName("DeleteConfirmed")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id, int dayId)
+        public ActionResult DeleteConfirmed(int id, int dayId, string returnUrl)
         {
-            var existingDay = _dayRepository.GetById(dayId);
-
-            if (existingDay != null)
+            try
             {
-                var existingEvent = _eventRepository.GetById(id);
+                var existingDay = _dayRepository.GetById(dayId);
 
-                if (existingEvent != null)
+                if (existingDay != null)
                 {
-                    _eventServices.DeleteEvent(existingEvent, existingDay);
+                    var existingEvent = _eventRepository.GetById(id);
 
-                    return RedirectToAction("Index");
+                    if (existingEvent != null)
+                    {
+                        _eventServices.DeleteEvent(existingEvent, existingDay);
+
+                        return Redirect(string.IsNullOrEmpty(returnUrl) ? Url.Action("Index", "Events") : returnUrl);
+                        //return RedirectToAction("Index");
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred in the Delete action.");
             }
             return NotFound();
         }

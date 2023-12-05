@@ -40,5 +40,9 @@ namespace Student_Planner.Repositories.Implementations
         {
             return _dbContext.Events.FirstOrDefault(e => e.DayId == dayId);
         }
+        public IEnumerable<Event>? GetAllByDayId(int dayId)
+        {
+            return GetAll().Where(e => e.DayId == dayId);
+        }
     }
 }

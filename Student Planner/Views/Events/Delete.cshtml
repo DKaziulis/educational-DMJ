@@ -39,8 +39,18 @@
 
     @Html.HiddenFor(model => model.DayId)
 
+    <input type="hidden" name="ReturnUrl" id="ReturnUrl" value="@ViewBag.ReferringUrl">
+
     <div >
         <button type="submit" style="margin-right: 100px;" class="btn btn-danger">Delete</button>
-        @Html.ActionLink("Cancel", "Index")
+        <a href="javascript:void(0);" onclick="goBack()" class="btn btn-secondary">Cancel</a>
     </div>
+
+    @section scripts {
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+}
 }

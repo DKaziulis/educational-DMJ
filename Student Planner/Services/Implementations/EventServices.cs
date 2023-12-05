@@ -43,7 +43,10 @@ namespace Student_Planner.Services.Implementations
                 }
             }
             //Takes the short date (yyyy-MM-dd) of the passed event, and converts it to DateOnly
-            newEvent.StartTime = TimeOnly.FromDateTime(newEvent.BeginDate);
+            if(newEvent.StartTime == default)
+            {
+                newEvent.StartTime = TimeOnly.FromDateTime(newEvent.BeginDate);
+            }
             DateOnly tempShortDate = DateOnly.FromDateTime(newEvent.BeginDate);
 
             //Checks which day to create the event for
