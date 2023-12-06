@@ -5,7 +5,12 @@ VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Student Planner", "Student Planner\Student Planner.csproj", "{D9FD83D0-3D00-418F-B06C-DEA0882278BD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Student Planner.Tests", "Student Planner.Tests\Student Planner.Tests.csproj", "{2020030F-53EE-4FB5-9C80-F187E6C68E95}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Student Planner.Tests", "Student Planner.Tests\Student Planner.Tests.csproj", "{2020030F-53EE-4FB5-9C80-F187E6C68E95}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{25828E32-5EA4-4A49-857F-168E5D1F2EC8}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
