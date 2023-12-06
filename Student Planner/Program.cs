@@ -5,16 +5,25 @@ using Student_Planner.Repositories.Implementations;
 using Serilog;
 using Student_Planner.Services.Interfaces;
 using Student_Planner.Services.Implementations;
+using Microsoft.AspNetCore.Identity;
+using Student_Planner.Areas.Identity.Data;
+using Student_Planner.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddRazorPages();
+
 builder.Services.AddDbContext<EventsDBContext>(
     options => options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection"), 
         x => x.UseDateOnlyTimeOnly()));
+
+var connectionString = builder.Configuration.GetConnectionString("AuthDbContextConnection") ?? throw new InvalidOperationException("Connection string 'AuthDbContextConnection' not found.");
+builder.Services.AddDbContext<AuthDbContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<AuthDbContext>();
 
 builder.Services.AddScoped<IDayRepository, DayRepository>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
@@ -50,5 +59,6 @@ app.MapControllerRoute(
 app.MapControllerRoute(
     name: "event",
     pattern: "{controller=Event}/{action=DayEvent}/{id?}");
+app.MapRazorPages();
 
 app.Run();
