@@ -5,6 +5,8 @@ using Student_Planner.Repositories.Implementations;
 using Serilog;
 using Student_Planner.Services.Interfaces;
 using Student_Planner.Services.Implementations;
+using Student_Planner.Services.Interceptors;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +23,9 @@ builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<IEventServices, EventServices>();
 builder.Services.AddScoped<IDayOperator, DayOperator>();
 
+builder.Services.AddHttpClient("MyApiClient")
+    .AddHttpMessageHandler<Interceptor>();
+
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .WriteTo.File("Logs/app.log", rollingInterval: RollingInterval.Day)
@@ -31,7 +36,15 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
+    // Add custom logging middleware before error handling
+    app.Use(async (context, next) =>
+    {
+        Log.Information("Request received: {Path}", context.Request.Path);
+        await next();
+    });
+
     app.UseExceptionHandler("/Home/Error");
+
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
