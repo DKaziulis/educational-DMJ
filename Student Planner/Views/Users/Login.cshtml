@@ -1,26 +1,96 @@
 ﻿@model User
 
-<h2>Login</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <style>
+        body {
+            background: linear-gradient(to right, #412722, #DFA06E);
+            font-family: 'Arial', sans-serif;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
 
-<form asp-action="Login" method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div>
-        <label asp-for="UserName">Username:</label>
-        <input asp-for="UserName" required />
-        <span asp-validation-for="UserName" class="text-danger"></span>
-    </div>
-    <div>
-        <label asp-for="Email">Email:</label>
-        <input asp-for="Email" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
-    <div>
-        <label asp-for="Password">Password:</label>
-        <input asp-for="Password" type="password" required />
-        <span asp-validation-for="Password" class="text-danger"></span>
-    </div>
-    <input type="submit" value="Login"/>
-</form>
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        input {
+            width: calc(100% - 20px);
+            padding: 8px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+            input[type="submit"] {
+                background-color: #5C6BC0;
+                color: white;
+                cursor: pointer;
+            }
+
+                input[type="submit"]:hover {
+                    background-color: #3F51B5;
+                }
+
+        .text-danger {
+            color: #d9534f;
+            font-size: 12px;
+            display: block;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <form asp-action="Login" method="post">
+        <h2>Login</h2>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div>
+            <label asp-for="UserName">Username:</label>
+            <input asp-for="UserName" required />
+            <span asp-validation-for="UserName" class="text-danger"></span>
+        </div>
+        <div>
+            <label asp-for="Email">Email:</label>
+            <input asp-for="Email" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div>
+            <label asp-for="Password">Password:</label>
+            <input asp-for="Password" type="password" required />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+        <input type="submit" value="Login" />
+    </form>
+</body>
+</html>
+
+
+
+
 
 @* for testing *@
 @* @if (!ViewData.ModelState.IsValid)

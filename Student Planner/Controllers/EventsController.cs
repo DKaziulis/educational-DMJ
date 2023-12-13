@@ -9,7 +9,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Student_Planner.Controllers
 {
-    
+    [Authorize]
     public class EventsController : Controller
     {
         private readonly IDayRepository _dayRepository;
