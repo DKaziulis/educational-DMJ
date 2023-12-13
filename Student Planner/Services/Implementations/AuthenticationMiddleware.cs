@@ -9,7 +9,6 @@ public class AuthenticationMiddleware
     {
         _next = next;
     }
-
     public async Task InvokeAsync(HttpContext context)
     {
         // Check if the user is not authenticated
