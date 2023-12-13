@@ -29,6 +29,11 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => {
     })
     .AddEntityFrameworkStores<EventsDBContext>();
 
+builder.Services.AddTransient<LoggingInterceptor>();
+
+builder.Services.AddHttpClient("LoggingInterceptorClient")
+            .AddHttpMessageHandler<LoggingInterceptor>();
+
 
 builder.Services.AddScoped<IDayRepository, DayRepository>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
