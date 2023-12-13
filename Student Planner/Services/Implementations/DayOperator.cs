@@ -21,7 +21,7 @@ namespace Student_Planner.Services.Implementations
         }
 
         // Loads the list of all existing dates from the repository
-        private ConcurrentDictionary<DateOnly, Day> LoadDays()
+        public ConcurrentDictionary<DateOnly, Day> LoadDays()
         {
             var days = _dayRepository.GetAll();
             var dictionary = new ConcurrentDictionary<DateOnly, Day>();
