@@ -1,13 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Student_Planner.Models;
 using Student_Planner.Enums;
 using Student_Planner.Repositories.Interfaces;
 using Student_Planner.Services.Implementations;
 using Student_Planner.Services.Interfaces;
+using Microsoft.Extensions.Logging;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Student_Planner.Controllers
 {
+    [Authorize]
     public class EventsController : Controller
     {
         private readonly IDayRepository _dayRepository;
