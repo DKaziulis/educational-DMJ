@@ -5,7 +5,9 @@ using Student_Planner.Repositories.Implementations;
 using Serilog;
 using Student_Planner.Services.Interfaces;
 using Student_Planner.Services.Implementations;
+
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,15 +19,37 @@ builder.Services.AddDbContext<EventsDBContext>(
         builder.Configuration.GetConnectionString("DefaultConnection"), 
         x => x.UseDateOnlyTimeOnly()));
 
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Calendar API", Version = "v1" });
-});
+builder.Services.AddDefaultIdentity<IdentityUser>(options => {
+        options.SignIn.RequireConfirmedAccount = false;
+        options.User.RequireUniqueEmail = true;
+        options.Password.RequireDigit = false;
+        options.Password.RequiredLength = 5;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireUppercase = false;
+        options.Password.RequireLowercase = false;
+    })
+    .AddEntityFrameworkStores<EventsDBContext>();
+
+builder.Services.AddTransient<LoggingInterceptor>();
+
+builder.Services.AddHttpClient("LoggingInterceptorClient")
+            .AddHttpMessageHandler<LoggingInterceptor>();
 
 builder.Services.AddScoped<IDayRepository, DayRepository>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<IEventServices, EventServices>();
 builder.Services.AddScoped<IDayOperator, DayOperator>();
+
+//builder.Services.ConfigureApplicationCookie(options =>
+//{
+//    // Cookie settings
+//    options.Cookie.HttpOnly = true;
+//    options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+
+//    options.LoginPath = "/Users/Login";
+//    options.AccessDeniedPath = "/Home";
+//    options.SlidingExpiration = true;
+//});
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -47,8 +71,15 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseAuthentication();
+
+
+app.UseMiddleware<AuthenticationMiddleware>();
+
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
 
 app.UseRouting(
     );

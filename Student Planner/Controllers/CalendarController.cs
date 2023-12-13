@@ -3,9 +3,11 @@ using Microsoft.CodeAnalysis.Operations;
 using Student_Planner.Repositories.Interfaces;
 using Student_Planner.Models;
 using Student_Planner.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Student_Planner.Controllers
 {
+    [Authorize]
     public class CalendarController : Controller
     {
         private readonly IEventRepository _eventRepository;
