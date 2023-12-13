@@ -12,8 +12,9 @@ public class AuthenticationMiddleware
 
     public async Task InvokeAsync(HttpContext context)
     {
+        // Check if the user is not authenticated
         if (!context.User.Identity.IsAuthenticated &&
-            (context.Request.Path.StartsWithSegments("/Calendar") || context.Request.Path.StartsWithSegments("/Events")))
+            (context.Request.Path.StartsWithSegments("/Calendar") || context.Request.Path.StartsWithSegments("/Event")))
         {
             // User is not authenticated and trying to access Calendar or Event.
             // Redirect them to the login page.

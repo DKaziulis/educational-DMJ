@@ -66,6 +66,9 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.UseMiddleware<AuthenticationMiddleware>();
 
 
@@ -76,8 +79,6 @@ app.UseStaticFiles();
 app.UseRouting(
     );
 
-app.UseAuthentication();
-app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
